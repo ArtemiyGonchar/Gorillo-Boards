@@ -20,6 +20,7 @@ namespace DataAccessLayer.Configurations
             builder.Property(x => x.Role).HasConversion<string>().IsRequired().HasMaxLength(20); //in db it will be displayed as "admin" or "member", not 1 or 2
             builder.Property(x => x.AvatarUrl).HasMaxLength(2048);
             builder.Property(x => x.PasswordHash).HasMaxLength(256).IsRequired();
+            builder.Property(x => x.Salt).HasMaxLength(256).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
         }
     }

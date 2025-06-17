@@ -13,7 +13,8 @@ namespace DataAccessLayer.Entities
         public string DisplayName { get; set; }
         public string? AvatarUrl { get; set; }
         public string PasswordHash { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string Salt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public UserRoleGlobal Role { get; set; } = UserRoleGlobal.Member;
     }
 }
