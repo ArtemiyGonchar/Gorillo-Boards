@@ -11,45 +11,35 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services.Classes
 {
-    public class UserService : IUserService
+    public class UserManagmentService : IUserManagmentService
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IPasswordHasher passwordHasher)
+        public UserManagmentService(IUserRepository userRepository, IPasswordHasher passwordHasher, IMapper mapper)
         {
             _userRepository = userRepository;
-            _mapper = mapper;
             _passwordHasher = passwordHasher;
+            _mapper = mapper;
         }
 
-
-        //TODO implement checking if username exists in db before creating new one
         public async Task<Guid> RegisterUser(UserRegistrationDTO userRegistrationDTO)
         {
-            //checking if user is in db
+            var userInDb = await _userRepository.GetByUsername(userRegistrationDTO.UserName) == null; //cheking if user is in db
+
+            if (!userInDb)
+            {
+                throw new ArgumentNullException(nameof(userRegistrationDTO));
+            }
 
             userRegistrationDTO.PasswordHash = _passwordHasher.Hash(userRegistrationDTO.PasswordHash);
 
             var userMapped = _mapper.Map<User>(userRegistrationDTO);
+            var userId = await _userRepository.CreateAsync(userMapped);
 
-
-
-
-            var userCreated = await _userRepository.CreateAsync(userMapped);
-            return userCreated;
+            return userId;
         }
 
-        public async Task<bool> LoginUser(UserLoginDTO userLoginDTO)
-        {
-            var userMapped = _mapper.Map<User>(userLoginDTO);
-
-            var user = await _userRepository.GetByUsername(userMapped.UserName);
-            var userPass = user.PasswordHash;
-            var verify = _passwordHasher.Verify(userMapped.PasswordHash, userPass);
-
-            return verify;
-        }
     }
 }

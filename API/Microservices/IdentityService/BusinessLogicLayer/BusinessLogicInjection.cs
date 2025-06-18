@@ -1,6 +1,7 @@
 ﻿using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
+using BusinessLogicLayer.Services.Security;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace BusinessLogicLayer
         {
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
         }
     }
 }

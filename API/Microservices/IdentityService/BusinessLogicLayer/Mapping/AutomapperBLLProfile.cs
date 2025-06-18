@@ -17,6 +17,7 @@ namespace BusinessLogicLayer.Mapping
         {
             CreateMap<UserRoleGlobal, UserRoleDTO>().ReverseMap();
             CreateMap<User, UserRegistrationDTO>().ReverseMap();
+            CreateMap<User, UserLoginDTO>().ReverseMap();
         }
 
     }
