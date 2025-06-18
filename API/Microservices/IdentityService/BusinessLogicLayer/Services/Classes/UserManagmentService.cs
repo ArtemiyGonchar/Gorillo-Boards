@@ -30,7 +30,7 @@ namespace BusinessLogicLayer.Services.Classes
 
             if (!userInDb)
             {
-                throw new ArgumentNullException(nameof(userRegistrationDTO));
+                throw new Exception("Such user exists");
             }
 
             userRegistrationDTO.PasswordHash = _passwordHasher.Hash(userRegistrationDTO.PasswordHash);

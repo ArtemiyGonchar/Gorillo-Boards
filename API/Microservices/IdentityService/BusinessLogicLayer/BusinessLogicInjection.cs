@@ -18,6 +18,8 @@ namespace BusinessLogicLayer
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserManagmentService, UserManagmentService>();
         }
     }
 }

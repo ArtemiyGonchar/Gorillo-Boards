@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Services.Interfaces;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,22 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
         }
 
-        public Task<bool> LoginUser(UserLoginDTO userLoginDTO)
+        public async Task<bool> LoginUser(UserLoginDTO userLoginDTO)
         {
-            throw new NotImplementedException();
+
+            var userInDb = await _userRepository.GetByUsername(userLoginDTO.UserName) != null; //cheking if user is in db
+
+            if (userInDb == false)
+            {
+                throw new ArgumentNullException(nameof(userLoginDTO));
+            }
+            var userMapped = _mapper.Map<User>(userLoginDTO);
+            var user = await _userRepository.GetByUsername(userMapped.UserName);
+            var userPass = user.PasswordHash;
+
+            var verify = _passwordHasher.Verify(userMapped.PasswordHash, userPass);
+
+            return verify;
         }
     }
 }
