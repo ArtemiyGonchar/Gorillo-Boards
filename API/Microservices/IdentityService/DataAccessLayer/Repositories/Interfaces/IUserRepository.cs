@@ -9,5 +9,6 @@ namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
+        Task<User?> GetByUsername(string username);
     }
 }

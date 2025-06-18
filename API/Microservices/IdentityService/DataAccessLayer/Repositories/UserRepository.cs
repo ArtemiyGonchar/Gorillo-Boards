@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.DatabaseContext;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace DataAccessLayer.Repositories
         public UserRepository(IdentityDbContext ctx) : base(ctx)
         {
             _ctx = ctx;
+        }
+
+        public async Task<User?> GetByUsername(string username)
+        {
+            return await _ctx.Set<User>().SingleOrDefaultAsync(u => u.UserName == username);
         }
     }
 }
