@@ -24,22 +24,30 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
         }
 
-        public async Task<bool> LoginUser(UserLoginDTO userLoginDTO)
+        public async Task<UserJwtDTO> LoginUser(UserLoginDTO userLoginDTO)
         {
 
             var userInDb = await _userRepository.GetByUsername(userLoginDTO.UserName) != null; //cheking if user is in db
 
             if (userInDb == false)
             {
-                throw new ArgumentNullException(nameof(userLoginDTO));
+                throw new ArgumentNullException(nameof(userLoginDTO)); //TODO rewrite exeption
             }
             var userMapped = _mapper.Map<User>(userLoginDTO);
             var user = await _userRepository.GetByUsername(userMapped.UserName);
+
             var userPass = user.PasswordHash;
 
             var verify = _passwordHasher.Verify(userMapped.PasswordHash, userPass);
 
-            return verify;
+            if (verify == false)
+            {
+                return null;
+            }
+
+            var userJwtDto = _mapper.Map<UserJwtDTO>(user);
+
+            return userJwtDto;
         }
     }
 }
