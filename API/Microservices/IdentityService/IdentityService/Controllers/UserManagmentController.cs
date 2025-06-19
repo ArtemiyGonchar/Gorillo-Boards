@@ -1,11 +1,13 @@
 ﻿using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
     [Route("api/admin/usermanagment")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class UserManagmentController : Controller
     {
         private readonly IUserManagmentService _userManagmentService;
