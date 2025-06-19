@@ -15,7 +15,7 @@ namespace PresentationLayer.Extenstions
             _configuration = configuration;
         }
 
-        public string CreateToken(UserJwtDTO user)
+        public string CreateToken(Guid Id, string username, string role)
         {
             string secretKey = _configuration["Jwt:Secret"]; //in user secrets
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)); //TODO add null check
@@ -26,9 +26,9 @@ namespace PresentationLayer.Extenstions
             {
                 Subject = new ClaimsIdentity(
                     [
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName),
-                        new Claim(ClaimTypes.Role, user.Role.ToString())
+                        new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
+                        new Claim(ClaimTypes.Name, username),
+                        new Claim(ClaimTypes.Role, role)
                     ]),
                 Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
                 SigningCredentials = credentials,
