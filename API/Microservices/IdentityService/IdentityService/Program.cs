@@ -1,6 +1,11 @@
 
 using BusinessLogicLayer;
 using DataAccessLayer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using PresentationLayer.Extenstions;
+using System.Text;
 
 namespace IdentityService
 {
@@ -16,9 +21,30 @@ namespace IdentityService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddBLLayer();
             builder.Services.AddDataAccesLayer(builder.Configuration);
+            builder.Services.AddJwtTokenProvider();
+
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)
+                    )
+                };
+            });
+
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGenWithJWT();
+
 
             var app = builder.Build();
 
@@ -30,9 +56,10 @@ namespace IdentityService
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 
