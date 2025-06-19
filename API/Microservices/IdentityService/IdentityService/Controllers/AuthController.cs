@@ -24,7 +24,7 @@ namespace PresentationLayer.Controllers
 
             if (userJwt != null)
             {
-                var token = _jwtTokenProvider.CreateToken(userJwt);
+                var token = _jwtTokenProvider.CreateToken(userJwt.Id, userJwt.UserName, userJwt.Role.ToString());
                 return Ok(token);
             }
 
