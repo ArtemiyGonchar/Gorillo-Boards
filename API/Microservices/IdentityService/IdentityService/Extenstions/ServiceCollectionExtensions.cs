@@ -8,8 +8,6 @@ namespace PresentationLayer.Extenstions
         {
             services.AddSwaggerGen(o =>
             {
-                //o.SwaggerDoc("v1", new() { })
-
                 o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
