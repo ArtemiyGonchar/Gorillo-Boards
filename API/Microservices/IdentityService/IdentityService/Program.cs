@@ -19,7 +19,7 @@ namespace IdentityService
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddBLLayer();
+            builder.Services.AddBLLayer(builder.Configuration);
             builder.Services.AddDataAccesLayer(builder.Configuration);
             builder.Services.AddJwtTokenProvider();
 

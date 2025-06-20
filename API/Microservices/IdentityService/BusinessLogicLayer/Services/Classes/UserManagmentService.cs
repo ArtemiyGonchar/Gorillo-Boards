@@ -3,6 +3,8 @@ using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.Interfaces;
+using GorilloBoards.Contracts.IntegrationEvents;
+using GorilloBoards.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +17,14 @@ namespace BusinessLogicLayer.Services.Classes
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IEventPublisher _eventPublisher;
         private readonly IMapper _mapper;
 
-        public UserManagmentService(IUserRepository userRepository, IPasswordHasher passwordHasher, IMapper mapper)
+        public UserManagmentService(IUserRepository userRepository, IPasswordHasher passwordHasher, IMapper mapper, IEventPublisher eventPublisher)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _eventPublisher = eventPublisher;
             _mapper = mapper;
         }
 
@@ -37,6 +41,15 @@ namespace BusinessLogicLayer.Services.Classes
 
             var userMapped = _mapper.Map<User>(userRegistrationDTO);
             var userId = await _userRepository.CreateAsync(userMapped);
+
+            var userCreatedEvent = new UserCreatedEvent
+            {
+                Id = userId,
+                Username = userRegistrationDTO.UserName,
+                Role = userRegistrationDTO.Role.ToString()
+            };
+
+            await _eventPublisher.Publish(userCreatedEvent);
 
             return userId;
         }
