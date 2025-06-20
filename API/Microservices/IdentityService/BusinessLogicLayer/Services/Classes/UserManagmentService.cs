@@ -28,6 +28,31 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
         }
 
+        public async Task<bool> DeleteUserByUsername(string username)
+        {
+            var userInDb = await _userRepository.GetByUsername(username) == null;
+
+            if (userInDb)
+            {
+                throw new Exception("Such user not exists");
+            }
+
+            var user = await _userRepository.GetByUsername(username);
+            var isDeleted = await _userRepository.DeleteByUsername(username);
+
+            if (isDeleted)
+            {
+                var userDeletedEvent = new UserDeletedEvent
+                {
+                    Id = user.Id,
+                    Username = username,
+                };
+
+                await _eventPublisher.Publish(userDeletedEvent);
+            }
+            return isDeleted;
+        }
+
         public async Task<Guid> RegisterUser(UserRegistrationDTO userRegistrationDTO)
         {
             var userInDb = await _userRepository.GetByUsername(userRegistrationDTO.UserName) == null; //cheking if user is in db

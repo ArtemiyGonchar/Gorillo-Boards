@@ -19,6 +19,19 @@ namespace DataAccessLayer.Repositories
             _ctx = ctx;
         }
 
+        public async Task<bool> DeleteByUsername(string username)
+        {
+            var user = await _ctx.Set<User>().SingleOrDefaultAsync(u => u.UserName == username);
+            if (user == null)
+            {
+                return false;
+            }
+
+            _ctx.Set<User>().Remove(user);
+            await _ctx.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<User?> GetByUsername(string username)
         {
             return await _ctx.Set<User>().SingleOrDefaultAsync(u => u.UserName == username);

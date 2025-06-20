@@ -18,8 +18,6 @@ namespace BusinessLogicLayer.Services.Classes
 
         public AzureBusEventPublisherService(ServiceBusClient serviceBusClient, ServiceBusSender serviceBusSender)
         {
-
-
             _serviceBusClient = serviceBusClient;
             _serviceBusSender = serviceBusSender;
         }
@@ -35,17 +33,6 @@ namespace BusinessLogicLayer.Services.Classes
                 MessageId = Guid.NewGuid().ToString(),
                 Subject = eventName,
                 Body = new BinaryData(body)
-            };
-
-            await _serviceBusSender.SendMessageAsync(message);
-        }
-
-        public async Task PublishTest(string raw)
-        {
-            var message = new ServiceBusMessage()
-            {
-                MessageId = Guid.NewGuid().ToString(),
-                Body = new BinaryData(raw)
             };
 
             await _serviceBusSender.SendMessageAsync(message);

@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface IUserManagmentService
     {
         Task<Guid> RegisterUser(UserRegistrationDTO userRegistrationDTO);
+        Task<bool> DeleteUserByUsername(string username);
     }
 }
