@@ -27,18 +27,14 @@ namespace BusinessLogicLayer.Services.Classes
         public async Task<UserJwtDTO> LoginUser(UserLoginDTO userLoginDTO)
         {
 
-            var userInDb = await _userRepository.GetByUsername(userLoginDTO.UserName) != null; //cheking if user is in db
+            var user = await _userRepository.GetByUsername(userLoginDTO.UserName);
 
-            if (userInDb == false)
+            if (user == null) //cheking if user is in db
             {
-                throw new ArgumentNullException(nameof(userLoginDTO)); //TODO rewrite exeption
+                throw new Exception("No such user");
             }
-            var userMapped = _mapper.Map<User>(userLoginDTO);
-            var user = await _userRepository.GetByUsername(userMapped.UserName);
 
-            var userPass = user.PasswordHash;
-
-            var verify = _passwordHasher.Verify(userMapped.PasswordHash, userPass);
+            var verify = _passwordHasher.Verify(userLoginDTO.PasswordHash, user.PasswordHash);
 
             if (verify == false)
             {
