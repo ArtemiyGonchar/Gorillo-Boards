@@ -23,5 +23,13 @@ namespace PresentationLayer.Controllers
             var userId = await _userManagmentService.RegisterUser(userRegistrationDTO);
             return Ok(userId);
         }
+
+        [HttpPost("DeleteUser")]
+        public async Task<IActionResult> DeleteUser([FromBody] string username)
+        {
+            var IsDeleted = await _userManagmentService.DeleteUserByUsername(username);
+
+            return Ok(IsDeleted);
+        }
     }
 }
