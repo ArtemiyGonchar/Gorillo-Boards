@@ -11,5 +11,7 @@ namespace DataAccessLayer.Repositories.Interfaces
     public interface IBoardRoleRepository : IRepository<BoardRole>
     {
         Task<bool> BoardHasSuchRole(Guid boardId, UserRoleGlobal role);
+
+        Task<bool> DeleteRoleByBoardId(Guid boardId, UserRoleGlobal role);
     }
 }

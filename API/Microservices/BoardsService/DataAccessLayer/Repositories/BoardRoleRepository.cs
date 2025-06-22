@@ -5,6 +5,7 @@ using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,20 @@ namespace DataAccessLayer.Repositories
         public async Task<bool> BoardHasSuchRole(Guid boardId, UserRoleGlobal role)
         {
             return await _ctx.Set<BoardRole>().AnyAsync(r => r.BoardId == boardId && r.Role == role);
+        }
+
+        public async Task<bool> DeleteRoleByBoardId(Guid boardId, UserRoleGlobal role)
+        {
+            var entity = await _ctx.Set<BoardRole>().FirstOrDefaultAsync(r => r.BoardId == boardId && r.Role == role);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _ctx.Set<BoardRole>().Remove(entity);
+            await _ctx.SaveChangesAsync();
+            return true;
         }
     }
 }
