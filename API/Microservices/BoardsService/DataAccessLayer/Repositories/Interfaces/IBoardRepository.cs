@@ -9,5 +9,6 @@ namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface IBoardRepository : IRepository<Board>
     {
+        Task<Board?> GetBoardByTitle(string title);
     }
 }
