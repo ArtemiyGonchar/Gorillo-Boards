@@ -11,5 +11,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     {
         Task<Guid> CreateBoardAsync(BoardCreateDTO boardCreateDTO);
         Task<Guid> CreateBoardRole(BoardCreateAllowedRoleDTO boardCreateAllowedRoleDTO);
+        Task<bool> DeleteBoardRole(BoardDeleteAllowedRoleDTO boardDeleteAllowedRoleDTO);
     }
 }

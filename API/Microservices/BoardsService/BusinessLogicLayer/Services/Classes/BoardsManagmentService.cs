@@ -74,5 +74,36 @@ namespace BusinessLogicLayer.Services.Classes
             var boardRoleCreatedId = await _boardRoleRepository.CreateAsync(boardRoleMapped);
             return boardRoleCreatedId;
         }
+
+        public async Task<bool> DeleteBoardRole(BoardDeleteAllowedRoleDTO boardDeleteAllowedRoleDTO)
+        {
+            if ((((int)boardDeleteAllowedRoleDTO.AllowedRole) + 1) > Enum.GetNames(typeof(UserRoleBL)).Length)
+            {
+                throw new Exception("No such role");
+            }
+
+            var board = await _boardRepository.GetBoardByTitle(boardDeleteAllowedRoleDTO.Title);
+
+            if (board == null)
+            {
+                throw new Exception("Such board not exists");
+            }
+
+            var boardId = board.Id;
+
+            var boardRoleMapped = _mapper.Map<BoardRole>(boardDeleteAllowedRoleDTO);
+            boardRoleMapped.BoardId = boardId;
+
+            var mappedRole = _mapper.Map<UserRoleGlobal>(boardDeleteAllowedRoleDTO.AllowedRole);
+
+            if (!(await _boardRoleRepository.BoardHasSuchRole(boardId, mappedRole)))
+            {
+                throw new Exception("Such role not exists");
+            }
+
+            boardRoleMapped.Role = mappedRole;
+            var boardRoleIsDeleted = await _boardRoleRepository.DeleteRoleByBoardId(boardId, mappedRole);
+            return boardRoleIsDeleted;
+        }
     }
 }
