@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface IBoardsManagmentService
     {
         Task<Guid> CreateBoardAsync(BoardCreateDTO boardCreateDTO);
+        Task<Guid> CreateBoardRole(BoardCreateAllowedRoleDTO boardCreateAllowedRoleDTO);
     }
 }

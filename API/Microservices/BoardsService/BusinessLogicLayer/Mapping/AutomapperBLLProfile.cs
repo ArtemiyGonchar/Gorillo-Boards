@@ -18,6 +18,8 @@ namespace BusinessLogicLayer.Mapping
             CreateMap<UserRoleGlobal, UserRoleBL>().ReverseMap();
             CreateMap<Board, BoardCreateDTO>().ReverseMap();
 
+            CreateMap<BoardRole, BoardCreateAllowedRoleDTO>().ReverseMap();
+            CreateMap<BoardRole, BoardDeleteAllowedRoleDTO>().ReverseMap();
         }
     }
 }
