@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLogicLayer.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace BusinessLogicLayer.Services.Interfaces
 {
     public interface IBoardsManagmentService
     {
-
+        Task<Guid> CreateBoardAsync(BoardCreateDTO boardCreateDTO);
     }
 }
