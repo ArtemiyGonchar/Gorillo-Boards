@@ -23,5 +23,12 @@ namespace BoardsService.Controllers
             var boardId = await _boardsManagmentService.CreateBoardAsync(boardCreateDTO);
             return Ok(boardId);
         }
+
+        [HttpPost("CreateBoardAllowedRole")]
+        public async Task<IActionResult> CreateBoardAllowedRole([FromBody] BoardCreateAllowedRoleDTO boardCreateAllowedRoleDTO)
+        {
+            var id = await _boardsManagmentService.CreateBoardRole(boardCreateAllowedRoleDTO);
+            return Ok(id);
+        }
     }
 }
