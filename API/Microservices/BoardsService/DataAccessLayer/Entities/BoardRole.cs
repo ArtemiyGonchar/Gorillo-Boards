@@ -12,6 +12,6 @@ namespace DataAccessLayer.Entities
         public Guid BoardId { get; set; }
         public Board Board { get; set; }
 
-        public UserRoleGlobal AllowedRoles { get; set; }
+        public UserRoleGlobal Role { get; set; }
     }
 }

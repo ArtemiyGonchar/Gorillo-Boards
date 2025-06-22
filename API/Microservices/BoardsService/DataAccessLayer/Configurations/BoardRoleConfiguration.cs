@@ -14,7 +14,8 @@ namespace DataAccessLayer.Configurations
         public void Configure(EntityTypeBuilder<BoardRole> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.AllowedRoles).HasConversion<string>().IsRequired();
+            builder.Property(x => x.Role).HasConversion<string>().IsRequired().HasMaxLength(20);
+            builder.HasIndex(x => new { x.BoardId, x.Role }).IsUnique();
 
             builder.HasOne(x => x.Board).WithMany(b => b.AllowedRoles).HasForeignKey(x => x.BoardId);
         }
