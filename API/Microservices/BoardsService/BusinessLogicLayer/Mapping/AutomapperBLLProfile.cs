@@ -16,7 +16,11 @@ namespace BusinessLogicLayer.Mapping
         public AutomapperBLLProfile()
         {
             CreateMap<UserRoleGlobal, UserRoleBL>().ReverseMap();
+            CreateMap<UserRoleGlobal, int>().ReverseMap(); //????
             CreateMap<Board, BoardCreateDTO>().ReverseMap();
+            CreateMap<Board, BoardDTO>().ReverseMap();
+            // CreateMap<List<Board>, <List<BoardDTO>().ReverseMap();
+
 
             CreateMap<BoardRole, BoardCreateAllowedRoleDTO>().ReverseMap();
             CreateMap<BoardRole, BoardDeleteAllowedRoleDTO>().ReverseMap();

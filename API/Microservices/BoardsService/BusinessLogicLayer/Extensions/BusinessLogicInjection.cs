@@ -16,6 +16,7 @@ namespace BusinessLogicLayer.Extensions
         {
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<IBoardsManagmentService, BoardsManagmentService>();
+            services.AddScoped<IBoardAccessService, BoardAccessService>();
         }
     }
 }
