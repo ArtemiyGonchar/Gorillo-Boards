@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.DatabaseContext;
 using DataAccessLayer.Entities;
+using DataAccessLayer.Enums;
 using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,7 +21,15 @@ namespace DataAccessLayer.Repositories
 
         public async Task<Board?> GetBoardByTitle(string title)
         {
-            return await _ctx.Set<Board>().SingleOrDefaultAsync(b => b.Title == title);
+            return await _ctx.Set<Board>()
+                .SingleOrDefaultAsync(b => b.Title == title);
+        }
+
+        public async Task<List<Board>> GetBoardsByRole(UserRoleGlobal role)
+        {
+            return await _ctx.Set<Board>()
+                .Include(b => b.AllowedRoles)
+                .Where(b => b.AllowedRoles.Any(r => r.Role == role)).ToListAsync();
         }
     }
 }

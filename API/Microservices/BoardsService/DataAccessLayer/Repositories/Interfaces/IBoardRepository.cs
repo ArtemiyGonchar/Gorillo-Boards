@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace DataAccessLayer.Repositories.Interfaces
     public interface IBoardRepository : IRepository<Board>
     {
         Task<Board?> GetBoardByTitle(string title);
+
+        Task<List<Board>> GetBoardsByRole(UserRoleGlobal role);
     }
 }
