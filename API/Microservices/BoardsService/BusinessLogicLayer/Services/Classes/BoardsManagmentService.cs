@@ -75,6 +75,18 @@ namespace BusinessLogicLayer.Services.Classes
             return boardRoleCreatedId;
         }
 
+        public async Task<bool> DeleteBoardAsync(string title)
+        {
+            var board = await _boardRepository.GetBoardByTitle(title);
+            if (board == null)
+            {
+                throw new Exception("Such board not exists");
+            }
+
+            var boardDeleted = await _boardRepository.DeleteAsync(board.Id);
+            return boardDeleted;
+        }
+
         public async Task<bool> DeleteBoardRole(BoardDeleteAllowedRoleDTO boardDeleteAllowedRoleDTO)
         {
             if ((((int)boardDeleteAllowedRoleDTO.AllowedRole) + 1) > Enum.GetNames(typeof(UserRoleBL)).Length)

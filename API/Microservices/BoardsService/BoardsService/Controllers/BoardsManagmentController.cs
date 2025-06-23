@@ -37,5 +37,12 @@ namespace BoardsService.Controllers
             var isDeleted = await _boardsManagmentService.DeleteBoardRole(boardDeleteAllowedRoleDTO);
             return Ok(isDeleted);
         }
+
+        [HttpPost("DeleteBoard")]
+        public async Task<IActionResult> DeleteBoard([FromBody] string title)
+        {
+            var isDeleted = await _boardsManagmentService.DeleteBoardAsync(title);
+            return Ok(isDeleted);
+        }
     }
 }
