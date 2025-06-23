@@ -8,7 +8,7 @@ namespace BoardsService.Controllers
     [Route("api/admin/boardmanagment")]
     [ApiController]
     [Authorize(Roles = "Admin")]
-    public class BoardsManagmentController : Controller
+    public class BoardsManagmentController : ControllerBase
     {
         private readonly IBoardsManagmentService _boardsManagmentService;
 
