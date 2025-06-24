@@ -5,6 +5,8 @@ using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Enums;
 using DataAccessLayer.Repositories.Interfaces;
+using GorilloBoards.Contracts.IntegrationEvents;
+using GorilloBoards.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,12 +21,14 @@ namespace BusinessLogicLayer.Services.Classes
         private readonly IBoardRepository _boardRepository;
         private readonly IBoardRoleRepository _boardRoleRepository;
         private readonly IMapper _mapper;
+        private readonly IEventPublisher _eventPublisher;
 
-        public BoardsManagmentService(IBoardRepository boardRepository, IMapper mapper, IBoardRoleRepository boardRoleRepository)
+        public BoardsManagmentService(IBoardRepository boardRepository, IMapper mapper, IBoardRoleRepository boardRoleRepository, IEventPublisher eventPublisher)
         {
             _boardRepository = boardRepository;
             _mapper = mapper;
             _boardRoleRepository = boardRoleRepository;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<Guid> CreateBoardAsync(BoardCreateDTO boardCreateDTO)
@@ -39,8 +43,14 @@ namespace BusinessLogicLayer.Services.Classes
             var boardMapped = _mapper.Map<Board>(boardCreateDTO);
             var boardId = await _boardRepository.CreateAsync(boardMapped);
 
-            /// here will be service bus event
-            /// 
+            var boardCreatedEvent = new BoardCreatedEvent
+            {
+                Id = boardId,
+                Title = boardMapped.Title,
+            };
+
+            await _eventPublisher.Publish(boardCreatedEvent);
+
             return boardId;
         }
 
@@ -84,6 +94,15 @@ namespace BusinessLogicLayer.Services.Classes
             }
 
             var boardDeleted = await _boardRepository.DeleteAsync(board.Id);
+
+            var boardDeletedEvent = new BoardDeletedEvent
+            {
+                Id = board.Id,
+                Title = board.Title
+            };
+
+            await _eventPublisher.Publish(boardDeletedEvent);
+
             return boardDeleted;
         }
 
