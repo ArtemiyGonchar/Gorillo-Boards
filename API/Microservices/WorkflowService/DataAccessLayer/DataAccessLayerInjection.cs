@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.DatabaseContext;
+using DataAccessLayer.Repositories;
+using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,9 @@ namespace DataAccessLayer
             {
                 options.UseSqlServer(configuration.GetConnectionString("DbConnectionString"));
             });
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ITicketBoardRepository, TicketBoardRepository>();
         }
     }
 }
