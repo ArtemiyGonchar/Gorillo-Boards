@@ -16,7 +16,7 @@ namespace BoardsService
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddDataAccessLayer(builder.Configuration);
-            builder.Services.AddBLLayer();
+            builder.Services.AddBLLayer(builder.Configuration);
 
             builder.Services.AddEndpointsApiExplorer();
             //builder.Services.AddSwaggerGen();
