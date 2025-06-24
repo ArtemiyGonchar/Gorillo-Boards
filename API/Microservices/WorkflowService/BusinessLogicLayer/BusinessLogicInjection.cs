@@ -1,4 +1,7 @@
 ﻿using BusinessLogicLayer.Mapping;
+using BusinessLogicLayer.Services.Classes;
+using BusinessLogicLayer.Services.Interfaces;
+using DataAccessLayer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,7 +16,9 @@ namespace BusinessLogicLayer
     {
         public static void AddBLLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDataAccessLayer(configuration);
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
+            services.AddScoped<IBoardManagmentService, BoardManagmentService>();
         }
     }
 }
