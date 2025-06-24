@@ -13,13 +13,20 @@ namespace DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<Board> builder)
         {
-            builder.Property(x => x.Title).HasMaxLength(100).IsRequired();
+            builder.Property(x => x.Title)
+                .HasMaxLength(100)
+                .IsRequired();
             builder.HasIndex(x => x.Title).IsUnique();
 
-            builder.Property(x => x.Description).HasMaxLength(2048);
-            builder.Property(x => x.CreatedAt).IsRequired();
+            builder.Property(x => x.Description)
+                .HasMaxLength(2048);
+            builder.Property(x => x.CreatedAt)
+                .IsRequired();
 
-            builder.HasMany(x => x.AllowedRoles).WithOne(b => b.Board).HasForeignKey(x => x.BoardId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.AllowedRoles)
+                .WithOne(b => b.Board)
+                .HasForeignKey(x => x.BoardId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
