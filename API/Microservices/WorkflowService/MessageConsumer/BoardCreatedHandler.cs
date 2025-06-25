@@ -12,11 +12,11 @@ namespace MessageConsumer
     public class BoardCreatedHandler
     {
         private readonly ILogger<BoardCreatedHandler> _logger;
-        private readonly IBoardManagmentService _boardManagmentService;
-        public BoardCreatedHandler(ILogger<BoardCreatedHandler> logger, IBoardManagmentService boardManagmentService)
+        private readonly IBoardManagementService _boardManagementService;
+        public BoardCreatedHandler(ILogger<BoardCreatedHandler> logger, IBoardManagementService boardManagmentService)
         {
             _logger = logger;
-            _boardManagmentService = boardManagmentService;
+            _boardManagementService = boardManagmentService;
         }
 
         [Function(nameof(BoardCreatedHandler))]
@@ -31,7 +31,7 @@ namespace MessageConsumer
 
             _logger.LogInformation($"Board created: {dto.Title}");
 
-            await _boardManagmentService.BoardCreate(dto);
+            await _boardManagementService.BoardCreate(dto);
         }
     }
 }
