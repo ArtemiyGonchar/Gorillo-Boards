@@ -13,5 +13,6 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<bool> DeleteState(Guid stateId);
 
         Task<bool> ChangeOrderState(Guid stateId, int targetOrder);
+        Task<Guid> RenameState(StateRenameDTO stateRenameDTO);
     }
 }

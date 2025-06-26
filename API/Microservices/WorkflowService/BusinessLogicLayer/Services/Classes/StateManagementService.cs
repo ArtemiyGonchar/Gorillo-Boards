@@ -105,5 +105,19 @@ namespace BusinessLogicLayer.Services.Classes
             await _stateRepository.UpdateManyStates(allStates);
             return isDeleted;
         }
+
+        public async Task<Guid> RenameState(StateRenameDTO stateRenameDTO)
+        {
+            var state = await _stateRepository.GetAsync(stateRenameDTO.Id);
+            if (state == null)
+            {
+                throw new Exception("Such state not exists");
+            }
+
+            state.Title = stateRenameDTO.Title;
+
+            var stateId = await _stateRepository.UpdateAsync(state);
+            return stateId;
+        }
     }
 }
