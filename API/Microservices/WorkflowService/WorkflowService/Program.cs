@@ -19,8 +19,8 @@ namespace WorkflowService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddBLLayer(builder.Configuration);
             //builder.Services.AddDataAccessLayer(builder.Configuration);
-
-
+            builder.Services.AddHttpContextAccessor(); //&&&
+            builder.Services.AddRefitClients(builder.Configuration);
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
             {
