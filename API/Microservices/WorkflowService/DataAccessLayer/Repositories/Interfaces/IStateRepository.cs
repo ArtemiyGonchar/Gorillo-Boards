@@ -9,5 +9,8 @@ namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface IStateRepository : IRepository<State>
     {
+        Task<Guid> CreateStateWithOder(State state);
+        Task<List<State>> GetStatesByBoardId(Guid boardId);
+        Task<bool> UpdateManyStates(IEnumerable<State> states);
     }
 }
