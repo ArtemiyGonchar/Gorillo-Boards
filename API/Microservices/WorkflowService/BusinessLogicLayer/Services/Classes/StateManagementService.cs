@@ -25,6 +25,49 @@ namespace BusinessLogicLayer.Services.Classes
             _boardsServiceClient = boardsServiceClient;
         }
 
+        public async Task<bool> ChangeOrderState(Guid stateId, int targetOrder)
+        {
+            var state = await _stateRepository.GetAsync(stateId);
+
+            if (state == null)
+            {
+                throw new Exception("Such state not exists");
+            }
+
+            var statesByBoard = await _stateRepository.GetStatesByBoardId(state.BoardId);
+
+            if (state.Order == targetOrder)
+            {
+                return false;
+            }
+
+            if (state.Order < targetOrder)
+            {
+                foreach (var stateInList in statesByBoard)
+                {
+                    if (stateInList.Order > state.Order && stateInList.Order <= targetOrder)
+                    {
+                        stateInList.Order--;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var stateInList in statesByBoard)
+                {
+                    if (stateInList.Order >= targetOrder && stateInList.Order < state.Order)
+                    {
+                        stateInList.Order++;
+                    }
+                }
+            }
+
+            state.Order = targetOrder;
+            await _stateRepository.UpdateAsync(state);
+            await _stateRepository.UpdateManyStates(statesByBoard);
+            return true;
+        }
+
         public async Task<Guid> CreateState(StateCreateDTO stateCreateDTO)
         {
             // todo add validation
@@ -36,7 +79,7 @@ namespace BusinessLogicLayer.Services.Classes
                 throw new Exception("Unuthorized");
             }
             var stateMapped = _mapper.Map<State>(stateCreateDTO);
-            var stateId = await _stateRepository.CreateAsync(stateMapped);
+            var stateId = await _stateRepository.CreateStateWithOder(stateMapped);
             return stateId;
         }
 
