@@ -39,5 +39,17 @@ namespace BusinessLogicLayer.Services.Classes
             var stateId = await _stateRepository.CreateAsync(stateMapped);
             return stateId;
         }
+
+        public async Task<bool> DeleteState(Guid stateId)
+        {
+            var inDb = await _stateRepository.GetAsync(stateId);
+            if (inDb == null)
+            {
+                throw new Exception("Such state not exists");
+            }
+
+            var isDeleted = await _stateRepository.DeleteAsync(stateId);
+            return isDeleted;
+        }
     }
 }

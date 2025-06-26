@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface IStateManagementService
     {
         Task<Guid> CreateState(StateCreateDTO stateCreateDTO);
+        Task<bool> DeleteState(Guid stateId);
     }
 }
