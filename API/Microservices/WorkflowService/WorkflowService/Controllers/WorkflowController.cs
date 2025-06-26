@@ -18,10 +18,25 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("create-state")]
-        public async Task<IActionResult> CreateState(StateCreateDTO dto)
+        public async Task<IActionResult> CreateState([FromBody] StateCreateDTO dto)
         {
             var stateId = await _stateManagementService.CreateState(dto);
             return Ok(stateId);
         }
+
+        [HttpPost("delete-state")]
+        public async Task<IActionResult> DeleteState([FromBody] Guid stateId)
+        {
+            var deleted = await _stateManagementService.DeleteState(stateId);
+            return Ok(deleted);
+        }
+
+        [HttpPost("change-state-order")]
+        public async Task<IActionResult> ChangeStateOrder([FromQuery] Guid stateId, int orderTarget)
+        {
+            var changedOrder = await _stateManagementService.ChangeOrderState(stateId, orderTarget);
+            return Ok(changedOrder);
+        }
+
     }
 }
