@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface IBoardAccessService
     {
         Task<List<BoardDTO>> GetBoards(string role);
+        Task<bool> HasAccess(Guid boardId, string role);
     }
 }
