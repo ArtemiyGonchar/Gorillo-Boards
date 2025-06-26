@@ -14,6 +14,7 @@ namespace BusinessLogicLayer.Mapping
         public AutomapperBLLProfile()
         {
             CreateMap<TicketBoard, BoardCreatedDTO>().ReverseMap();
+            CreateMap<State, StateCreateDTO>().ReverseMap();
         }
     }
 }

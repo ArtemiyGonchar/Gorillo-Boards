@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.DTO
 {
-    public class BoardCreatedDTO
+    public class StateCreateDTO
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
+        public Guid BoardId { get; set; }
     }
 }

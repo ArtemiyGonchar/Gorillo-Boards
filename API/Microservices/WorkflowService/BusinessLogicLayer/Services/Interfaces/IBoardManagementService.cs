@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services.Interfaces
 {
-    public interface IBoardManagmentService
+    public interface IBoardManagementService
     {
         Task<Guid> BoardCreate(BoardCreatedDTO boardCreatedDTO);
+        Task<bool> BoardDelete(string title);
     }
 }

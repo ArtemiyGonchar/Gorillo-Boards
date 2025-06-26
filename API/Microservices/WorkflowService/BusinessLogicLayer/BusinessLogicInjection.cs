@@ -1,7 +1,9 @@
-﻿using BusinessLogicLayer.Mapping;
+﻿using BusinessLogicLayer.ApiClients;
+using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,7 +20,9 @@ namespace BusinessLogicLayer
         {
             services.AddDataAccessLayer(configuration);
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
-            services.AddScoped<IBoardManagmentService, BoardManagmentService>();
+            services.AddScoped<IBoardManagementService, BoardManagementService>();
+            services.AddScoped<IStateManagementService, StateManagementService>();
+            services.AddScoped<AuthHeaderHandler>();
         }
     }
 }

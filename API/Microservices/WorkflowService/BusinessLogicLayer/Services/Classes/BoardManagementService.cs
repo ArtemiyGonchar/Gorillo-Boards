@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services.Classes
 {
-    public class BoardManagmentService : IBoardManagmentService
+    public class BoardManagementService : IBoardManagementService
     {
         private readonly ITicketBoardRepository _ticketBoardRepository;
         private readonly IMapper _mapper;
-        public BoardManagmentService(ITicketBoardRepository ticketBoardRepository, IMapper mapper)
+        public BoardManagementService(ITicketBoardRepository ticketBoardRepository, IMapper mapper)
         {
             _ticketBoardRepository = ticketBoardRepository;
             _mapper = mapper;
@@ -34,6 +34,18 @@ namespace BusinessLogicLayer.Services.Classes
             var boardMapped = _mapper.Map<TicketBoard>(boardCreatedDTO);
             var boardId = await _ticketBoardRepository.CreateAsync(boardMapped);
             return boardId;
+        }
+
+        public async Task<bool> BoardDelete(string title)
+        {
+            var board = await _ticketBoardRepository.GetBoardByTitle(title);
+            if (board == null)
+            {
+                throw new Exception("Such board not exists");
+            }
+
+            var boardDeleted = await _ticketBoardRepository.DeleteAsync(board.Id);
+            return boardDeleted;
         }
     }
 }
