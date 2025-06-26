@@ -38,5 +38,11 @@ namespace PresentationLayer.Controllers
             return Ok(changedOrder);
         }
 
+        [HttpPost("rename-state")]
+        public async Task<IActionResult> RenameState([FromBody] StateRenameDTO dto)
+        {
+            var id = await _stateManagementService.RenameState(dto);
+            return Ok(id);
+        }
     }
 }
