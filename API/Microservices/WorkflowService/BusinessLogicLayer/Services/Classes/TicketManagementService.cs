@@ -80,6 +80,47 @@ namespace BusinessLogicLayer.Services.Classes
             return true;
         }
 
+        public async Task<Guid> ChangeTicketState(TicketChangeStateDTO ticketChangeStateDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketChangeStateDTO.Id);
+
+            if (ticket.StateId == ticketChangeStateDTO.StateId)
+            {
+                throw new Exception("Trying to ticket's change state to same state");
+            }
+
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            var state = await _stateRepository.GetAsync(ticketChangeStateDTO.StateId);
+
+            if (state == null)
+            {
+                throw new Exception("Such state not exists");
+            }
+            //changing orders starting from right
+            var allTickets = await _ticketRepository.GetTicketsByStateId(ticket.StateId);
+
+            var orderToDelete = ticket.Order;
+
+            foreach (var ticketInList in allTickets)
+            {
+                if (ticketInList.Order > orderToDelete)
+                {
+                    ticketInList.Order--;
+                }
+            }
+
+            ticket.StateId = ticketChangeStateDTO.StateId;
+            //new order for another state
+            ticket.Order = (await _ticketRepository.GetMaxOrderCount(ticketChangeStateDTO.StateId)) + 1;
+
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
+        }
+
         public async Task<Guid> CreateTicket(TicketCreateDTO ticketCreateDTO)
         {
             var stateExists = await _stateRepository.GetAsync(ticketCreateDTO.StateId);
@@ -102,6 +143,7 @@ namespace BusinessLogicLayer.Services.Classes
             {
                 throw new Exception("Such ticket not exists");
             }
+            //changing orders starting from right
             var allTickets = await _ticketRepository.GetTicketsByStateId(ticket.StateId);
 
             var orderToDelete = ticket.Order;

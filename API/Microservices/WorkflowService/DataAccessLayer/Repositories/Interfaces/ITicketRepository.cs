@@ -12,5 +12,6 @@ namespace DataAccessLayer.Repositories.Interfaces
         Task<bool> UpdateManyTickets(IEnumerable<Ticket> ticket);
         Task<List<Ticket>> GetTicketsByStateId(Guid stateId);
         Task<Guid> CreateTicketWithOder(Ticket tickets);
+        Task<int> GetMaxOrderCount(Guid stateId);
     }
 }

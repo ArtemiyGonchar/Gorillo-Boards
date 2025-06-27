@@ -81,5 +81,11 @@ namespace PresentationLayer.Controllers
             var id = await _ticketManagementService.ChangeDescriptionTicket(dto);
             return Ok(id);
         }
+        [HttpPost("change-ticket-state")]
+        public async Task<IActionResult> ChangeTicketState([FromBody] TicketChangeStateDTO dto)
+        {
+            var id = await _ticketManagementService.ChangeTicketState(dto);
+            return Ok(id);
+        }
     }
 }

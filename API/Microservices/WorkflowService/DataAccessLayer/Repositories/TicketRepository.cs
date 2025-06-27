@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,15 @@ namespace DataAccessLayer.Repositories
             await _ctx.Set<Ticket>().AddAsync(ticket);
             await _ctx.SaveChangesAsync();
             return ticket.Id;
+        }
+
+        public async Task<int> GetMaxOrderCount(Guid stateId)
+        {
+            var order = await _ctx.Set<Ticket>()
+                .Where(t => t.StateId == stateId)
+                .Select(t => (int?)t.Order)
+                .MaxAsync() ?? 0;
+            return order;
         }
 
         public async Task<List<Ticket>> GetTicketsByStateId(Guid stateId)
