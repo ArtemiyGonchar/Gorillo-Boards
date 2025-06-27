@@ -119,6 +119,9 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BoardId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -126,8 +129,9 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Title")
-                        .IsUnique();
+                    b.HasIndex("BoardId", "Title")
+                        .IsUnique()
+                        .HasFilter("[BoardId] IS NOT NULL");
 
                     b.ToTable("Labels");
                 });
@@ -177,13 +181,23 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Entites.TicketLabel", "TicketLabel")
-                        .WithMany()
+                        .WithMany("Tickets")
                         .HasForeignKey("TicketLabelId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("State");
 
                     b.Navigation("TicketLabel");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Entites.TicketLabel", b =>
+                {
+                    b.HasOne("DataAccessLayer.Entites.TicketBoard", "Board")
+                        .WithMany("Labels")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Board");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entites.TicketTimeLog", b =>
@@ -209,7 +223,14 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Entites.TicketBoard", b =>
                 {
+                    b.Navigation("Labels");
+
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Entites.TicketLabel", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,5 +11,6 @@ namespace DataAccessLayer.Entites
         public string Title { get; set; }
 
         public ICollection<State> States { get; set; }
+        public ICollection<TicketLabel> Labels { get; set; }
     }
 }

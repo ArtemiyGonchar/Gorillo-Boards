@@ -17,16 +17,18 @@ namespace DataAccessLayer.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
-            builder.Property(x => x.Description).HasMaxLength(2048);
+            builder.Property(x => x.Description)
+                .HasMaxLength(2048);
 
-            builder.Property(x => x.IsClosed).IsRequired();
+            builder.Property(x => x.IsClosed)
+                .IsRequired();
 
             builder.HasOne(x => x.State)
                 .WithMany(s => s.Tickets)
                 .HasForeignKey(x => x.StateId);
 
             builder.HasOne(x => x.TicketLabel)
-                .WithMany()
+                .WithMany(l => l.Tickets)
                 .HasForeignKey(x => x.TicketLabelId)
                 .OnDelete(DeleteBehavior.SetNull);
 

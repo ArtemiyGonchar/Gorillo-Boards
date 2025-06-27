@@ -23,6 +23,7 @@ namespace BusinessLogicLayer
             services.AddScoped<IBoardManagementService, BoardManagementService>();
             services.AddScoped<IStateManagementService, StateManagementService>();
             services.AddScoped<ITicketManagementService, TicketManagementService>();
+            services.AddScoped<IFilteringService, FilteringService>();
             services.AddScoped<AuthHeaderHandler>();
         }
     }

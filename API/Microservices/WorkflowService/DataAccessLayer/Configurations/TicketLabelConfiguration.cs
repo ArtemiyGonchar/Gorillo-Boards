@@ -14,8 +14,18 @@ namespace DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<TicketLabel> builder)
         {
-            builder.Property(x => x.Title).HasMaxLength(50).IsRequired();
-            builder.HasIndex(x => x.Title).IsUnique();
+            builder.Property(x => x.Title)
+                .HasMaxLength(50)
+                .IsRequired();
+            //builder.HasIndex(x => x.Title).IsUnique();
+
+            builder.HasIndex(x => new { x.BoardId, x.Title })
+                .IsUnique();
+
+            builder.HasOne(x => x.Board)
+                .WithMany(b => b.Labels)
+                .HasForeignKey(x => x.BoardId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
