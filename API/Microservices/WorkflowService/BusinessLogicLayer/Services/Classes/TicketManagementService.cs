@@ -24,6 +24,19 @@ namespace BusinessLogicLayer.Services.Classes
             _stateRepository = stateRepository;
         }
 
+        public async Task<Guid> ChangeDescriptionTicket(TicketChangeDescription ticketChangeDescription)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketChangeDescription.Id);
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            ticket.Description = ticketChangeDescription.Description;
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
+        }
+
         public async Task<bool> ChangeOrderTicket(Guid ticketId, int targetOrder)
         {
             var ticket = await _ticketRepository.GetAsync(ticketId);
