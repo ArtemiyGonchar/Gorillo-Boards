@@ -11,7 +11,11 @@ namespace DataAccessLayer.Entites
     {
         public string Title { get; set; }
         public string? Description { get; set; }
+        public int Order { get; set; }
+
         public bool IsClosed { get; set; } = false;
+        public DateTime? TicketClosed { get; set; }
+
         public Guid? UserRequestor { get; set; }
         public Guid? UserAssigned { get; set; }
 
@@ -22,8 +26,6 @@ namespace DataAccessLayer.Entites
         public TicketLabel? TicketLabel { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? WorkStarted { get; set; }
-        public DateTime? WorkCompleted { get; set; }
         public ICollection<TicketTimeLog>? TimeLogs { get; set; }
     }
 }

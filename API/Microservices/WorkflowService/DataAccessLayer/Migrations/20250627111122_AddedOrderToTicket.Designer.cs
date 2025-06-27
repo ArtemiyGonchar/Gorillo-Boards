@@ -4,6 +4,7 @@ using DataAccessLayer.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(WorkflowDbContext))]
-    partial class WorkflowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250627111122_AddedOrderToTicket")]
+    partial class AddedOrderToTicket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<Guid>("StateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("TicketClosed")
+                    b.Property<DateTime>("TicketClosed")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("TicketLabelId")
