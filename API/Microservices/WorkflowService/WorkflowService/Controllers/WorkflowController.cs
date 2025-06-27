@@ -67,5 +67,12 @@ namespace PresentationLayer.Controllers
             var deleted = await _ticketManagementService.DeleteTicket(ticketId);
             return Ok(deleted);
         }
+
+        [HttpPost("rename-ticket")]
+        public async Task<IActionResult> RenameTicket([FromBody] TicketRenameDTO dto)
+        {
+            var id = await _ticketManagementService.RenameTicket(dto);
+            return Ok(id);
+        }
     }
 }

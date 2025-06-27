@@ -104,5 +104,19 @@ namespace BusinessLogicLayer.Services.Classes
             await _ticketRepository.UpdateManyTickets(allTickets);
             return isDeleted;
         }
+
+        public async Task<Guid> RenameTicket(TicketRenameDTO ticketRenameDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketRenameDTO.Id);
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            ticket.Title = ticketRenameDTO.Title;
+
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
+        }
     }
 }
