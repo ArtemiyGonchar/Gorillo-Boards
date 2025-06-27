@@ -11,10 +11,12 @@ namespace PresentationLayer.Controllers
     public class WorkflowController : ControllerBase
     {
         private readonly IStateManagementService _stateManagementService;
+        private readonly ITicketManagementService _ticketManagementService;
 
-        public WorkflowController(IStateManagementService stateManagementService)
+        public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService)
         {
             _stateManagementService = stateManagementService;
+            _ticketManagementService = ticketManagementService;
         }
 
         [HttpPost("create-state")]
@@ -42,6 +44,13 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> RenameState([FromBody] StateRenameDTO dto)
         {
             var id = await _stateManagementService.RenameState(dto);
+            return Ok(id);
+        }
+
+        [HttpPost("create-ticket")]
+        public async Task<IActionResult> CreateTicket([FromBody] TicketCreateDTO dto)
+        {
+            var id = await _ticketManagementService.CreateTicket(dto);
             return Ok(id);
         }
     }
