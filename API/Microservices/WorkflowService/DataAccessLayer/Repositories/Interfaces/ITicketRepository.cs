@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.Interfaces
 {
-    public interface ITicketRepository
+    public interface ITicketRepository : IRepository<Ticket>
     {
-        Task<Guid> CreateTicketWithOder(Ticket ticket);
+        Task<bool> UpdateManyTickets(IEnumerable<Ticket> ticket);
+        Task<List<Ticket>> GetTicketsByStateId(Guid stateId);
+        Task<Guid> CreateTicketWithOder(Ticket tickets);
     }
 }

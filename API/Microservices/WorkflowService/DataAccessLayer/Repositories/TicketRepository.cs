@@ -30,5 +30,31 @@ namespace DataAccessLayer.Repositories
             await _ctx.SaveChangesAsync();
             return ticket.Id;
         }
+
+        public async Task<List<Ticket>> GetTicketsByStateId(Guid stateId)
+        {
+            var tickets = await _ctx.Set<Ticket>()
+                .Where(t => t.StateId == stateId)
+                .OrderBy(s => s.Order)
+                .ToListAsync();
+            return tickets;
+        }
+
+        public async Task<bool> UpdateManyTickets(IEnumerable<Ticket> tickets)
+        {
+            try
+            {
+                foreach (var ticket in tickets)
+                {
+                    _ctx.Set<Ticket>().Update(ticket);
+                }
+                await _ctx.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -24,6 +24,49 @@ namespace BusinessLogicLayer.Services.Classes
             _stateRepository = stateRepository;
         }
 
+        public async Task<bool> ChangeOrderTicket(Guid ticketId, int targetOrder)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketId);
+
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            var ticketsByBoard = await _ticketRepository.GetTicketsByStateId(ticket.StateId);
+
+            if (ticket.Order == targetOrder)
+            {
+                return false;
+            }
+
+            if (ticket.Order < targetOrder)
+            {
+                foreach (var ticketInList in ticketsByBoard)
+                {
+                    if (ticketInList.Order > ticket.Order && ticketInList.Order <= targetOrder)
+                    {
+                        ticketInList.Order--;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var ticketInList in ticketsByBoard)
+                {
+                    if (ticketInList.Order >= targetOrder && ticketInList.Order < ticket.Order)
+                    {
+                        ticketInList.Order++;
+                    }
+                }
+            }
+
+            ticket.Order = targetOrder;
+            await _ticketRepository.UpdateAsync(ticket);
+            await _ticketRepository.UpdateManyTickets(ticketsByBoard);
+            return true;
+        }
+
         public async Task<Guid> CreateTicket(TicketCreateDTO ticketCreateDTO)
         {
             var stateExists = await _stateRepository.GetAsync(ticketCreateDTO.StateId);

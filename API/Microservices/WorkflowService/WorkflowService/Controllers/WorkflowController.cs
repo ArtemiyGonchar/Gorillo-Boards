@@ -53,5 +53,12 @@ namespace PresentationLayer.Controllers
             var id = await _ticketManagementService.CreateTicket(dto);
             return Ok(id);
         }
+
+        [HttpPost("change-ticket-order")]
+        public async Task<IActionResult> ChangeTicketOrder([FromBody] Guid ticketId, int orderTarget)
+        {
+            var changedOrder = await _ticketManagementService.ChangeOrderTicket(ticketId, orderTarget);
+            return Ok(changedOrder);
+        }
     }
 }

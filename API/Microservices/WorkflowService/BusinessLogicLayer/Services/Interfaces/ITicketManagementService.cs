@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface ITicketManagementService
     {
         Task<Guid> CreateTicket(TicketCreateDTO ticketCreateDTO);
+        Task<bool> ChangeOrderTicket(Guid ticketId, int targetOrder);
     }
 }
