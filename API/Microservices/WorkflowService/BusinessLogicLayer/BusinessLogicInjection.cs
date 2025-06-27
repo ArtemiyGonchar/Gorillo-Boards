@@ -22,6 +22,7 @@ namespace BusinessLogicLayer
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<IBoardManagementService, BoardManagementService>();
             services.AddScoped<IStateManagementService, StateManagementService>();
+            services.AddScoped<ITicketManagementService, TicketManagementService>();
             services.AddScoped<AuthHeaderHandler>();
         }
     }

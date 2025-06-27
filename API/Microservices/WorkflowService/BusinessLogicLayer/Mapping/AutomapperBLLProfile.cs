@@ -16,6 +16,7 @@ namespace BusinessLogicLayer.Mapping
             CreateMap<TicketBoard, BoardCreatedDTO>().ReverseMap();
             CreateMap<State, StateCreateDTO>().ReverseMap();
             CreateMap<State, StateRenameDTO>().ReverseMap();
+            CreateMap<Ticket, TicketCreateDTO>().ReverseMap();
         }
     }
 }
