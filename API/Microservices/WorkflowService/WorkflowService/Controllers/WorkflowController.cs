@@ -60,5 +60,12 @@ namespace PresentationLayer.Controllers
             var changedOrder = await _ticketManagementService.ChangeOrderTicket(ticketId, orderTarget);
             return Ok(changedOrder);
         }
+
+        [HttpPost("delete-ticket")]
+        public async Task<IActionResult> DeleteTicket([FromBody] Guid ticketId)
+        {
+            var deleted = await _ticketManagementService.DeleteTicket(ticketId);
+            return Ok(deleted);
+        }
     }
 }

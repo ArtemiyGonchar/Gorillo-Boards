@@ -81,5 +81,28 @@ namespace BusinessLogicLayer.Services.Classes
             var ticketId = await _ticketRepository.CreateTicketWithOder(ticket);
             return ticketId;
         }
+
+        public async Task<bool> DeleteTicket(Guid ticketId)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketId);
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+            var allTickets = await _ticketRepository.GetTicketsByStateId(ticket.StateId);
+
+            var orderToDelete = ticket.Order;
+
+            foreach (var ticketInList in allTickets)
+            {
+                if (ticketInList.Order > orderToDelete)
+                {
+                    ticketInList.Order--;
+                }
+            }
+            var isDeleted = await _ticketRepository.DeleteAsync(ticketId);
+            await _ticketRepository.UpdateManyTickets(allTickets);
+            return isDeleted;
+        }
     }
 }
