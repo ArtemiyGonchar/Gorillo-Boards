@@ -24,6 +24,24 @@ namespace BusinessLogicLayer.Services.Classes
             _stateRepository = stateRepository;
         }
 
+        public async Task<Guid> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketAssigneUserDTO.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception($"Such ticket not exists: {ticketAssigneUserDTO.TicketId}");
+            }
+
+            if (ticket.IsClosed)
+            {
+                throw new Exception($"This ticket is closed: {ticketAssigneUserDTO.TicketId}");
+            }
+
+            ticket.UserAssigned = ticketAssigneUserDTO.UserId;
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
+        }
+
         public async Task<Guid> ChangeDescriptionTicket(TicketChangeDescription ticketChangeDescription)
         {
             var ticket = await _ticketRepository.GetAsync(ticketChangeDescription.Id);

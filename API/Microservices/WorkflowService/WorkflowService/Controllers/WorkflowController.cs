@@ -113,6 +113,7 @@ namespace PresentationLayer.Controllers
             var timeLogId = await _timeLogService.TicketWorkStart(dto);
             return Ok(timeLogId);
         }
+
         [HttpPost("end-work-on-ticket")]
         public async Task<IActionResult> EndWork([FromBody] TicketEndWorkDTO dto)
         {
