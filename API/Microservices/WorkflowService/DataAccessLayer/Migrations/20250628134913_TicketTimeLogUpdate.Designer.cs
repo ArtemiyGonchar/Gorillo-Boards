@@ -4,6 +4,7 @@ using DataAccessLayer.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(WorkflowDbContext))]
-    partial class WorkflowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250628134913_TicketTimeLogUpdate")]
+    partial class TicketTimeLogUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("BoardId");
 
-                    b.ToTable("States", (string)null);
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entites.Ticket", b =>
@@ -91,7 +94,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("TicketLabelId");
 
-                    b.ToTable("Tickets", (string)null);
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entites.TicketBoard", b =>
@@ -110,7 +113,7 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("TicketBoards", (string)null);
+                    b.ToTable("TicketBoards");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entites.TicketLabel", b =>
@@ -133,7 +136,7 @@ namespace DataAccessLayer.Migrations
                         .IsUnique()
                         .HasFilter("[BoardId] IS NOT NULL");
 
-                    b.ToTable("Labels", (string)null);
+                    b.ToTable("Labels");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entites.TicketTimeLog", b =>
@@ -158,7 +161,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TimeLog", (string)null);
+                    b.ToTable("TimeLog");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entites.State", b =>

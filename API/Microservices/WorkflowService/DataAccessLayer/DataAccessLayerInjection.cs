@@ -26,6 +26,7 @@ namespace DataAccessLayer
             services.AddScoped<IStateRepository, StateRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<ITicketLabelRepository, TicketLabelRepository>();
+            services.AddScoped<ITimeLogRepository, TimeLogRepository>();
         }
     }
 }

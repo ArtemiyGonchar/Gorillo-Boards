@@ -24,6 +24,7 @@ namespace BusinessLogicLayer
             services.AddScoped<IStateManagementService, StateManagementService>();
             services.AddScoped<ITicketManagementService, TicketManagementService>();
             services.AddScoped<IFilteringService, FilteringService>();
+            services.AddScoped<ITimeLogService, TimeLogService>();
             services.AddScoped<AuthHeaderHandler>();
         }
     }

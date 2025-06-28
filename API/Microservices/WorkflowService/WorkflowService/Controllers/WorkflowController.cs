@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
 {
@@ -12,11 +13,13 @@ namespace PresentationLayer.Controllers
     {
         private readonly IStateManagementService _stateManagementService;
         private readonly ITicketManagementService _ticketManagementService;
+        private readonly ITimeLogService _timeLogService;
 
-        public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService)
+        public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService, ITimeLogService timeLogService)
         {
             _stateManagementService = stateManagementService;
             _ticketManagementService = ticketManagementService;
+            _timeLogService = timeLogService;
         }
 
         [HttpPost("create-state")]
@@ -50,6 +53,8 @@ namespace PresentationLayer.Controllers
         [HttpPost("create-ticket")]
         public async Task<IActionResult> CreateTicket([FromBody] TicketCreateDTO dto)
         {
+            var requestorId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserRequestor = Guid.Parse(requestorId);
             var id = await _ticketManagementService.CreateTicket(dto);
             return Ok(id);
         }
@@ -87,6 +92,22 @@ namespace PresentationLayer.Controllers
         {
             var id = await _ticketManagementService.ChangeTicketState(dto);
             return Ok(id);
+        }
+
+        [HttpPost("close-ticket")]
+        public async Task<IActionResult> CloseTicket([FromBody] TicketCloseDTO dto)
+        {
+            var id = await _ticketManagementService.CloseTicket(dto);
+            return Ok(id);
+        }
+
+        [HttpPost("start-work-on-ticket")]
+        public async Task<IActionResult> StartWork([FromBody] TicketStartWorkDTO dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserId = Guid.Parse(userId);
+            var timeLogId = await _timeLogService.TicketWorkStart(dto);
+            return Ok(timeLogId);
         }
     }
 }
