@@ -27,12 +27,21 @@ namespace BusinessLogicLayer.Services.Classes
 
         public async Task<bool> ChangeOrderState(Guid stateId, int targetOrder)
         {
+
             var state = await _stateRepository.GetAsync(stateId);
 
             if (state == null)
             {
                 throw new Exception("Such state not exists");
             }
+
+            var hasAccess = await _boardsServiceClient.HasAccess(state.BoardId);
+
+            if (!hasAccess)
+            {
+                throw new Exception("Unuthorized");
+            }
+
 
             var statesByBoard = await _stateRepository.GetStatesByBoardId(state.BoardId);
 
@@ -90,6 +99,14 @@ namespace BusinessLogicLayer.Services.Classes
             {
                 throw new Exception("Such state not exists");
             }
+
+            var hasAccess = await _boardsServiceClient.HasAccess(state.BoardId);
+
+            if (!hasAccess)
+            {
+                throw new Exception("Unuthorized");
+            }
+
             var allStates = await _stateRepository.GetStatesByBoardId(state.BoardId);
 
             var orderToDelete = state.Order;
@@ -112,6 +129,13 @@ namespace BusinessLogicLayer.Services.Classes
             if (state == null)
             {
                 throw new Exception("Such state not exists");
+            }
+
+            var hasAccess = await _boardsServiceClient.HasAccess(state.BoardId);
+
+            if (!hasAccess)
+            {
+                throw new Exception("Unuthorized");
             }
 
             state.Title = stateRenameDTO.Title;

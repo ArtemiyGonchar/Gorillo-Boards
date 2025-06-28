@@ -31,13 +31,13 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = await _ticketRepository.GetAsync(addLabelToTicket.TicketId);
             if (ticket == null)
             {
-                throw new Exception("Such ticket not exists");
+                throw new Exception($"Such ticket not exists: {addLabelToTicket.TicketId}");
             }
 
             var label = await _labelRepository.GetAsync(addLabelToTicket.LabelId);
             if (label == null)
             {
-                throw new Exception("Such label not exists");
+                throw new Exception($"Such label not exists: {addLabelToTicket.LabelId}");
             }
 
             ticket.TicketLabelId = addLabelToTicket.LabelId;
@@ -50,13 +50,32 @@ namespace BusinessLogicLayer.Services.Classes
             var board = await _boardRepository.GetAsync(labelCreateDTO.BoardId);
             if (board == null)
             {
-                throw new Exception($"Such board not exists{labelCreateDTO.BoardId}");
+                throw new Exception($"Such board not exists: {labelCreateDTO.BoardId}");
             }
 
             var label = _mapper.Map<TicketLabel>(labelCreateDTO);
 
             var labelId = await _labelRepository.CreateAsync(label);
             return labelId;
+        }
+
+        public async Task<Guid> DeleteLabelFromTicket(DeleteLabelFromTicketDTO deleteLabelFromTicket)
+        {
+            var ticket = await _ticketRepository.GetAsync(deleteLabelFromTicket.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception($"Such ticket not exists: {deleteLabelFromTicket.TicketId}");
+            }
+
+            if (ticket.TicketLabelId == null)
+            {
+                throw new Exception($"Ticket dont habe label: {ticket.TicketLabelId}");
+            }
+
+            ticket.TicketLabelId = null;
+
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
         }
     }
 }

@@ -11,5 +11,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     {
         Task<Guid> CreateLabel(LabelCreateDTO labelCreateDTO);
         Task<Guid> AddLabelToTicket(AddLabelToTicketDTO addLabelToTicket);
+        Task<Guid> DeleteLabelFromTicket(DeleteLabelFromTicketDTO deleteLabelFromTicket);
     }
 }
