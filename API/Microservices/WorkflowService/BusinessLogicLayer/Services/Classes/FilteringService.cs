@@ -15,13 +15,34 @@ namespace BusinessLogicLayer.Services.Classes
     {
         private readonly ITicketLabelRepository _labelRepository;
         private readonly ITicketBoardRepository _boardRepository;
+        private readonly ITicketRepository _ticketRepository;
         private readonly IMapper _mapper;
 
-        public FilteringService(ITicketLabelRepository labelRepository, IMapper mapper, ITicketBoardRepository boardRepository)
+        public FilteringService(ITicketLabelRepository labelRepository, IMapper mapper, ITicketBoardRepository boardRepository, ITicketRepository ticketRepository)
         {
             _labelRepository = labelRepository;
             _mapper = mapper;
             _boardRepository = boardRepository;
+            _ticketRepository = ticketRepository;
+        }
+
+        public async Task<Guid> AddLabelToTicket(AddLabelToTicketDTO addLabelToTicket)
+        {
+            var ticket = await _ticketRepository.GetAsync(addLabelToTicket.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            var label = await _labelRepository.GetAsync(addLabelToTicket.LabelId);
+            if (label == null)
+            {
+                throw new Exception("Such label not exists");
+            }
+
+            ticket.TicketLabelId = addLabelToTicket.LabelId;
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
         }
 
         public async Task<Guid> CreateLabel(LabelCreateDTO labelCreateDTO)

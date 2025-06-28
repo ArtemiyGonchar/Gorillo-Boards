@@ -23,5 +23,12 @@ namespace PresentationLayer.Controllers
             var labelId = await _filteringService.CreateLabel(dto);
             return Ok(labelId);
         }
+
+        [HttpPost("add-label-to-ticket")]
+        public async Task<IActionResult> AddLabelToTicket(AddLabelToTicketDTO dto)
+        {
+            var ticketId = await _filteringService.AddLabelToTicket(dto);
+            return Ok(ticketId);
+        }
     }
 }

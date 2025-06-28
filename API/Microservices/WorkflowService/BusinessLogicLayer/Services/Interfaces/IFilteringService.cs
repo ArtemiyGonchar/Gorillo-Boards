@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface IFilteringService
     {
         Task<Guid> CreateLabel(LabelCreateDTO labelCreateDTO);
+        Task<Guid> AddLabelToTicket(AddLabelToTicketDTO addLabelToTicket);
     }
 }
