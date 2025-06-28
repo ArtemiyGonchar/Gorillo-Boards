@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.DTO
+namespace BusinessLogicLayer.DTO.State
 {
-    public class StateRenameDTO
+    public class StateCreateDTO
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
+        public Guid BoardId { get; set; }
     }
 }

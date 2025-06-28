@@ -1,4 +1,4 @@
-﻿using BusinessLogicLayer.DTO;
+﻿using BusinessLogicLayer.DTO.Ticket;
 using System;
 using System.Collections.Generic;
 using System.Linq;

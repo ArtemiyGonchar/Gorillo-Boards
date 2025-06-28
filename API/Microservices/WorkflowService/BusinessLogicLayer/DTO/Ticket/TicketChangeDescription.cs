@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.DTO
+namespace BusinessLogicLayer.DTO.Ticket
 {
-    public class TicketChangeStateDTO
+    public class TicketChangeDescription
     {
         public Guid Id { get; set; }
-        public Guid StateId { get; set; }
+        public string Description { get; set; }
     }
 }

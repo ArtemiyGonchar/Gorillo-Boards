@@ -1,4 +1,4 @@
-﻿using BusinessLogicLayer.DTO;
+﻿using BusinessLogicLayer.DTO.TimeLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface ITimeLogService
     {
         Task<Guid> TicketWorkStart(TicketStartWorkDTO ticketStartWorkDTO);
+        Task<Guid> TicketWorkEnd(TicketEndWorkDTO ticketEndWorkDTO);
     }
 }

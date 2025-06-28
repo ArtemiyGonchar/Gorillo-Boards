@@ -1,5 +1,5 @@
 using Azure.Messaging.ServiceBus;
-using BusinessLogicLayer.DTO;
+using BusinessLogicLayer.DTO.Board;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using Microsoft.Azure.Functions.Worker;

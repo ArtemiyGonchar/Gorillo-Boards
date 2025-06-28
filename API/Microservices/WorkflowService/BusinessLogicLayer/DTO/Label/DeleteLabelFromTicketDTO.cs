@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.DTO
+namespace BusinessLogicLayer.DTO.Label
 {
-    public class TicketCloseDTO
+    public class DeleteLabelFromTicketDTO
     {
         public Guid TicketId { get; set; }
-        public Guid UserRequestor { get; set; }
     }
 }

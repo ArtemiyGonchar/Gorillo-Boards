@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
-using BusinessLogicLayer.DTO;
+using BusinessLogicLayer.DTO.Board;
+using BusinessLogicLayer.DTO.Label;
+using BusinessLogicLayer.DTO.State;
+using BusinessLogicLayer.DTO.Ticket;
+using BusinessLogicLayer.DTO.TimeLog;
 using DataAccessLayer.Entites;
 using System;
 using System.Collections.Generic;

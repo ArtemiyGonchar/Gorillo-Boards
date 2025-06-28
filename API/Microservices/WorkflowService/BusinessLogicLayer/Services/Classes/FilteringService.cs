@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessLogicLayer.DTO;
+using BusinessLogicLayer.DTO.Label;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entites;
 using DataAccessLayer.Repositories.Interfaces;

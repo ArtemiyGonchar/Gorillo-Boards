@@ -1,4 +1,6 @@
-﻿using BusinessLogicLayer.DTO;
+﻿using BusinessLogicLayer.DTO.State;
+using BusinessLogicLayer.DTO.Ticket;
+using BusinessLogicLayer.DTO.TimeLog;
 using BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -109,6 +111,14 @@ namespace PresentationLayer.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             dto.UserId = Guid.Parse(userId);
             var timeLogId = await _timeLogService.TicketWorkStart(dto);
+            return Ok(timeLogId);
+        }
+        [HttpPost("end-work-on-ticket")]
+        public async Task<IActionResult> EndWork([FromBody] TicketEndWorkDTO dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserId = Guid.Parse(userId);
+            var timeLogId = await _timeLogService.TicketWorkEnd(dto);
             return Ok(timeLogId);
         }
     }

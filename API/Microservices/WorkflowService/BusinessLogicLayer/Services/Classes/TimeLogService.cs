@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessLogicLayer.DTO;
+using BusinessLogicLayer.DTO.TimeLog;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entites;
 using DataAccessLayer.Repositories.Interfaces;
@@ -22,6 +22,31 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
             _timeLogRepository = timeLogRepository;
             _ticketRepository = ticketRepository;
+        }
+
+        public async Task<Guid> TicketWorkEnd(TicketEndWorkDTO ticketEndWorkDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketEndWorkDTO.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception($"Such ticket not exists: {ticketEndWorkDTO.TicketId}");
+            }
+
+            if (ticket.IsClosed)
+            {
+                throw new Exception($"This ticket is closed: {ticket.Id}");
+            }
+
+            var timeLog = await _timeLogRepository.GetByUserAndTicket(ticketEndWorkDTO.UserId, ticketEndWorkDTO.TicketId);
+
+            if (timeLog == null)
+            {
+                throw new Exception($"No work found on this ticket: {ticketEndWorkDTO.TicketId}");
+            }
+            timeLog.EndedAt = DateTime.UtcNow;
+            var timeLogId = await _timeLogRepository.UpdateAsync(timeLog);
+
+            return timeLogId;
         }
 
         public async Task<Guid> TicketWorkStart(TicketStartWorkDTO ticketStartWorkDTO)

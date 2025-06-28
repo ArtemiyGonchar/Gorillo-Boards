@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.ApiClients.Clients;
-using BusinessLogicLayer.DTO;
+using BusinessLogicLayer.DTO.State;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entites;
 using DataAccessLayer.Repositories.Interfaces;
