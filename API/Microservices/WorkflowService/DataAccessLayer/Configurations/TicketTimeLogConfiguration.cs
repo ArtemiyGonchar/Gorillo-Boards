@@ -19,7 +19,7 @@ namespace DataAccessLayer.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(x => x.StartedAt).IsRequired();
-            builder.Property(x => x.EndedAt).IsRequired();
+            //builder.Property(x => x.EndedAt).IsRequired();
         }
     }
 }

@@ -15,5 +15,6 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<Guid> RenameTicket(TicketRenameDTO ticketRenameDTO);
         Task<Guid> ChangeDescriptionTicket(TicketChangeDescription ticketChangeDescription);
         Task<Guid> ChangeTicketState(TicketChangeStateDTO ticketChangeStateDTO);
+        Task<Guid> CloseTicket(TicketCloseDTO ticketCloseDTO);
     }
 }

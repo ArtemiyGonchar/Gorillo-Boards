@@ -84,14 +84,14 @@ namespace BusinessLogicLayer.Services.Classes
         {
             var ticket = await _ticketRepository.GetAsync(ticketChangeStateDTO.Id);
 
-            if (ticket.StateId == ticketChangeStateDTO.StateId)
-            {
-                throw new Exception("Trying to ticket's change state to same state");
-            }
-
             if (ticket == null)
             {
                 throw new Exception("Such ticket not exists");
+            }
+
+            if (ticket.StateId == ticketChangeStateDTO.StateId)
+            {
+                throw new Exception("Trying to ticket's change state to same state");
             }
 
             var state = await _stateRepository.GetAsync(ticketChangeStateDTO.StateId);
@@ -117,6 +117,20 @@ namespace BusinessLogicLayer.Services.Classes
             //new order for another state
             ticket.Order = (await _ticketRepository.GetMaxOrderCount(ticketChangeStateDTO.StateId)) + 1;
 
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
+        }
+
+        public async Task<Guid> CloseTicket(TicketCloseDTO ticketCloseDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketCloseDTO.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception($"Such ticket not exists: {ticketCloseDTO.TicketId}");
+            }
+
+            ticket.IsClosed = true;
+            ticket.TicketClosed = DateTime.UtcNow;
             var ticketId = await _ticketRepository.UpdateAsync(ticket);
             return ticketId;
         }

@@ -13,6 +13,6 @@ namespace DataAccessLayer.Entites
 
         public Guid UserId { get; set; }
         public DateTime StartedAt { get; set; }
-        public DateTime EndedAt { get; set; }
+        public DateTime? EndedAt { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface ITicketLabelRepository : IRepository<TicketLabel>
     {
-
+        Task<List<TicketLabel>> GetAllLabelsByBoard(Guid boardId);
     }
 }
