@@ -97,6 +97,8 @@ namespace PresentationLayer.Controllers
         [HttpPost("close-ticket")]
         public async Task<IActionResult> CloseTicket([FromBody] TicketCloseDTO dto)
         {
+            var requestorId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserRequestor = Guid.Parse(requestorId);
             var id = await _ticketManagementService.CloseTicket(dto);
             return Ok(id);
         }

@@ -129,6 +129,11 @@ namespace BusinessLogicLayer.Services.Classes
                 throw new Exception($"Such ticket not exists: {ticketCloseDTO.TicketId}");
             }
 
+            if (ticket.UserRequestor != ticketCloseDTO.UserRequestor)
+            {
+                throw new Exception($"Only requestor can close this ticket: {ticket.Id}");
+            }
+
             ticket.IsClosed = true;
             ticket.TicketClosed = DateTime.UtcNow;
             var ticketId = await _ticketRepository.UpdateAsync(ticket);
