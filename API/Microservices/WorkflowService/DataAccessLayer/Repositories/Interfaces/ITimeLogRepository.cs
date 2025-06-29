@@ -10,5 +10,7 @@ namespace DataAccessLayer.Repositories.Interfaces
     public interface ITimeLogRepository : IRepository<TicketTimeLog>
     {
         Task<TicketTimeLog?> GetByUserAndTicket(Guid userId, Guid ticketId);
+        Task<TicketTimeLog?> GetByTicket(Guid ticketId);
+        Task<TicketTimeLog?> GetInProgressLogByTicket(Guid ticketId);
     }
 }

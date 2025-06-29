@@ -15,13 +15,15 @@ namespace BusinessLogicLayer.Services.Classes
     {
         private readonly IStateRepository _stateRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly ITimeLogRepository _logRepository;
         private readonly IMapper _mapper;
 
-        public TicketManagementService(ITicketRepository ticketRepository, IMapper mapper, IStateRepository stateRepository)
+        public TicketManagementService(ITicketRepository ticketRepository, IMapper mapper, IStateRepository stateRepository, ITimeLogRepository timeLogRepository)
         {
             _ticketRepository = ticketRepository;
             _mapper = mapper;
             _stateRepository = stateRepository;
+            _logRepository = timeLogRepository;
         }
 
         public async Task<Guid> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO)
@@ -35,6 +37,12 @@ namespace BusinessLogicLayer.Services.Classes
             if (ticket.IsClosed)
             {
                 throw new Exception($"This ticket is closed: {ticketAssigneUserDTO.TicketId}");
+            }
+
+            var timeLog = await _logRepository.GetInProgressLogByTicket(ticketAssigneUserDTO.TicketId);
+            if (timeLog != null)
+            {
+                throw new Exception($"This ticket in progress by another user: {ticketAssigneUserDTO.TicketId}");
             }
 
             ticket.UserAssigned = ticketAssigneUserDTO.UserId;

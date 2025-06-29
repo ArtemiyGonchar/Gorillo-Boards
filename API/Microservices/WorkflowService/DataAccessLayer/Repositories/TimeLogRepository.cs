@@ -19,10 +19,22 @@ namespace DataAccessLayer.Repositories
             _ctx = ctx;
         }
 
+        public async Task<TicketTimeLog?> GetByTicket(Guid ticketId)
+        {
+            return await _ctx.Set<TicketTimeLog>()
+                .FirstOrDefaultAsync(l => l.TicketId == ticketId);
+        }
+
         public async Task<TicketTimeLog?> GetByUserAndTicket(Guid userId, Guid ticketId)
         {
             return await _ctx.Set<TicketTimeLog>()
-                .FirstOrDefaultAsync(l => l.TicketId == ticketId && l.UserId == userId && l.EndedAt == null);
+                .FirstOrDefaultAsync(l => l.TicketId == ticketId && l.UserId == userId);
+        }
+
+        public async Task<TicketTimeLog?> GetInProgressLogByTicket(Guid ticketId)
+        {
+            return await _ctx.Set<TicketTimeLog>()
+                .FirstOrDefaultAsync(l => l.TicketId == ticketId && l.EndedAt == null);
         }
     }
 }

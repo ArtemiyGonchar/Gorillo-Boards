@@ -122,5 +122,14 @@ namespace PresentationLayer.Controllers
             var timeLogId = await _timeLogService.TicketWorkEnd(dto);
             return Ok(timeLogId);
         }
+
+        [HttpPost("assign-user-to-ticket")]
+        public async Task<IActionResult> AssignUserToTicket([FromBody] TicketAssigneUserDTO dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserId = Guid.Parse(userId);
+            var ticketId = await _ticketManagementService.AssignUserToTicket(dto);
+            return Ok(ticketId);
+        }
     }
 }

@@ -37,12 +37,18 @@ namespace BusinessLogicLayer.Services.Classes
                 throw new Exception($"This ticket is closed: {ticket.Id}");
             }
 
+            if (ticket.UserAssigned != ticketEndWorkDTO.UserId)
+            {
+                throw new Exception($"Only assigned user can end work on tickets: {ticket.Id}");
+            }
+
             var timeLog = await _timeLogRepository.GetByUserAndTicket(ticketEndWorkDTO.UserId, ticketEndWorkDTO.TicketId);
 
             if (timeLog == null)
             {
                 throw new Exception($"No work found on this ticket: {ticketEndWorkDTO.TicketId}");
             }
+
             timeLog.EndedAt = DateTime.UtcNow;
             var timeLogId = await _timeLogRepository.UpdateAsync(timeLog);
 
@@ -62,9 +68,19 @@ namespace BusinessLogicLayer.Services.Classes
                 throw new Exception($"This ticket is closed: {ticket.Id}");
             }
 
+            if (ticket.UserAssigned == null)
+            {
+                throw new Exception($"Assign yourself to ticket first: {ticket.Id}");
+            }
+
+            if (ticket.UserAssigned != ticketStartWorkDTO.UserId)
+            {
+                throw new Exception($"Only assigned user can start work on tickets: {ticket.Id}");
+            }
+
             var timeLog = await _timeLogRepository.GetByUserAndTicket(ticketStartWorkDTO.UserId, ticketStartWorkDTO.TicketId);
 
-            if (timeLog != null)
+            if (timeLog != null && timeLog.EndedAt == null)
             {
                 throw new Exception($"Work already stared on this ticket: {ticketStartWorkDTO.TicketId}");
             }
