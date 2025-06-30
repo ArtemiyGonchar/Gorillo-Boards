@@ -23,6 +23,18 @@ namespace IdentityService
             builder.Services.AddDataAccesLayer(builder.Configuration);
             builder.Services.AddJwtTokenProvider();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
+
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
@@ -54,6 +66,8 @@ namespace IdentityService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("AllowReact");
 
             app.UseHttpsRedirection();
             app.UseRouting();

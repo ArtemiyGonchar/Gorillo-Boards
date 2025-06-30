@@ -1,5 +1,6 @@
 ﻿using BusinessLogicLayer.DTO;
 using BusinessLogicLayer.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Extenstions;
 
@@ -30,5 +31,15 @@ namespace PresentationLayer.Controllers
 
             return Unauthorized();
         }
+
+
+        //for react hook
+        [Authorize]
+        [HttpGet("isAuthorized")]
+        public async Task<IActionResult> IsAuthorized()
+        {
+            return Ok(true);
+        }
+
     }
 }
