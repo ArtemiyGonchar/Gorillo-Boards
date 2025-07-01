@@ -25,14 +25,14 @@ namespace BusinessLogicLayer.Services.Classes
             _boardRoleRepository = boardRoleRepository;
         }
 
-        public async Task<List<BoardDTO>> GetBoards(string role)
+        public async Task<List<BoardResponseDTO>> GetBoards(string role)
         {
             var roleStringToEnum = Enum.Parse<UserRoleBL>(role);
 
             var roleMapped = _mapper.Map<UserRoleGlobal>(roleStringToEnum);
             var board = await _boardRepository.GetBoardsByRole(roleMapped);
 
-            return _mapper.Map<List<BoardDTO>>(board);
+            return _mapper.Map<List<BoardResponseDTO>>(board);
         }
 
         public async Task<bool> HasAccess(Guid boardId, string role)

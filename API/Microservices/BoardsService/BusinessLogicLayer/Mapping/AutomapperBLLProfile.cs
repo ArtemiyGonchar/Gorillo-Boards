@@ -20,7 +20,7 @@ namespace BusinessLogicLayer.Mapping
             CreateMap<Board, BoardCreateDTO>().ReverseMap();
             CreateMap<Board, BoardDTO>().ReverseMap();
             // CreateMap<List<Board>, <List<BoardDTO>().ReverseMap();
-
+            CreateMap<Board, BoardResponseDTO>().ReverseMap();
 
             CreateMap<BoardRole, BoardCreateAllowedRoleDTO>().ReverseMap();
             CreateMap<BoardRole, BoardDeleteAllowedRoleDTO>().ReverseMap();
