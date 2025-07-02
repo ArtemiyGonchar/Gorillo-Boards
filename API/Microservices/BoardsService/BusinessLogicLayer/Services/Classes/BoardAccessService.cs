@@ -25,6 +25,18 @@ namespace BusinessLogicLayer.Services.Classes
             _boardRoleRepository = boardRoleRepository;
         }
 
+        public async Task<BoardResponseDTO> GetBoardById(Guid boardId)
+        {
+            var board = await _boardRepository.GetAsync(boardId);
+            if (board == null)
+            {
+                throw new Exception("Such board not exists");
+            }
+
+            var boardResponse = _mapper.Map<BoardResponseDTO>(board);
+            return boardResponse;
+        }
+
         public async Task<List<BoardResponseDTO>> GetBoards(string role)
         {
             var roleStringToEnum = Enum.Parse<UserRoleBL>(role);
