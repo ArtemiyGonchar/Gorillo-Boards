@@ -1,0 +1,23 @@
+.board-list{
+    margin: 20px 8px;
+    gap: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.li-boards{
+    text-align: left;
+    width: 200px;
+    height: 100px;
+    padding: 5px;
+
+    background: #2980b9;
+    transition:  background-color 0.3s;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.li-boards:hover{
+    background-color: #878787;
+    transition:  background-color 0.3s;
+}
