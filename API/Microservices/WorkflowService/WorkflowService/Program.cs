@@ -3,6 +3,7 @@ using BusinessLogicLayer;
 using DataAccessLayer;
 using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Extensions;
+using PresentationLayer.Hubs;
 using System.Text;
 
 namespace WorkflowService
@@ -37,8 +38,20 @@ namespace WorkflowService
                 };
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
 
 
+            builder.Services.AddSignalR();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGenWithJWT();
@@ -52,6 +65,8 @@ namespace WorkflowService
                 app.UseSwaggerUI();
             }
 
+            //app.MapHub<WorkflowHub>("/workflowhub");
+            app.UseCors("AllowReact");
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -59,7 +74,7 @@ namespace WorkflowService
 
 
             app.MapControllers();
-
+            app.MapHub<WorkflowHub>("/workflowhub");
             app.Run();
         }
     }

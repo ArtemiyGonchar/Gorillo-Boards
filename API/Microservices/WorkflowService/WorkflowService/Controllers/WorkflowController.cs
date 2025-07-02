@@ -4,6 +4,8 @@ using BusinessLogicLayer.DTO.TimeLog;
 using BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using PresentationLayer.Hubs;
 using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
@@ -16,18 +18,22 @@ namespace PresentationLayer.Controllers
         private readonly IStateManagementService _stateManagementService;
         private readonly ITicketManagementService _ticketManagementService;
         private readonly ITimeLogService _timeLogService;
+        private readonly IHubContext<WorkflowHub> _hubContext;
 
-        public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService, ITimeLogService timeLogService)
+        public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService
+            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext)
         {
             _stateManagementService = stateManagementService;
             _ticketManagementService = ticketManagementService;
             _timeLogService = timeLogService;
+            _hubContext = hubContext;
         }
 
         [HttpPost("create-state")]
         public async Task<IActionResult> CreateState([FromBody] StateCreateDTO dto)
         {
             var stateId = await _stateManagementService.CreateState(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(stateId);
         }
 
