@@ -22,7 +22,6 @@ namespace BoardsService
             //builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerGenWithJWT();
 
-
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
             {
@@ -39,6 +38,20 @@ namespace BoardsService
                 };
             });
 
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -48,11 +61,13 @@ namespace BoardsService
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowReact");
             app.UseHttpsRedirection();
 
             //app.UseAuthorization();
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.MapControllers();
 

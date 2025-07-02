@@ -47,5 +47,12 @@ namespace PresentationLayer.Controllers
             }
             return Ok(hasAccess);
         }
+
+        [HttpGet("{boardId}/get-board-by-id")]
+        public async Task<IActionResult> GetBoardById(Guid boardId)
+        {
+            var board = await _boardAccessService.GetBoardById(boardId);
+            return Ok(board);
+        }
     }
 }
