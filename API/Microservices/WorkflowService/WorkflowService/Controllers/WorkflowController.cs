@@ -137,5 +137,12 @@ namespace PresentationLayer.Controllers
             var ticketId = await _ticketManagementService.AssignUserToTicket(dto);
             return Ok(ticketId);
         }
+
+        [HttpPost("get-tickets-by-state")]
+        public async Task<IActionResult> GetTicketsByState([FromBody] TicketGetByState dto)
+        {
+            var tickets = await _ticketManagementService.GetTicketsByState(dto);
+            return Ok(tickets);
+        }
     }
 }

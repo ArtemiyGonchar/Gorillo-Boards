@@ -205,6 +205,19 @@ namespace BusinessLogicLayer.Services.Classes
             return isDeleted;
         }
 
+        public async Task<List<TicketListDTO>> GetTicketsByState(TicketGetByState ticketGetByState)
+        {
+            var state = await _stateRepository.GetAsync(ticketGetByState.StateId);
+            if (state == null)
+            {
+                throw new Exception("Such state not esxists");
+            }
+
+            var tickets = await _ticketRepository.GetTicketByState(ticketGetByState.StateId);
+
+            return _mapper.Map<List<TicketListDTO>>(tickets);
+        }
+
         public async Task<Guid> RenameTicket(TicketRenameDTO ticketRenameDTO)
         {
             var ticket = await _ticketRepository.GetAsync(ticketRenameDTO.Id);

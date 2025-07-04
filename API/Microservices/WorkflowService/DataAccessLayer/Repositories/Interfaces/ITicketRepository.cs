@@ -14,5 +14,7 @@ namespace DataAccessLayer.Repositories.Interfaces
         Task<Guid> CreateTicketWithOder(Ticket tickets);
         Task<int> GetMaxOrderCount(Guid stateId);
         Task<List<Ticket>> GetTicketsByLabel(Guid labelId);
+
+        Task<List<Ticket>> GetTicketByState(Guid stateId);
     }
 }

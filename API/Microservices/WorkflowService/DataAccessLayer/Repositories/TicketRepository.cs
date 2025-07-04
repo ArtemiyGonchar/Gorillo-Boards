@@ -41,6 +41,14 @@ namespace DataAccessLayer.Repositories
             return order;
         }
 
+        public async Task<List<Ticket>> GetTicketByState(Guid stateId)
+        {
+            return await _ctx.Set<Ticket>()
+                .Where(t => t.StateId == stateId
+                ).Include(t => t.TicketLabel)
+                .ToListAsync();
+        }
+
         public async Task<List<Ticket>> GetTicketsByLabel(Guid labelId)
         {
             return await _ctx.Set<Ticket>()
