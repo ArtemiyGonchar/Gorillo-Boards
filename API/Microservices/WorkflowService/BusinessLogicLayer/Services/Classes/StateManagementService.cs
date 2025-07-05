@@ -25,14 +25,14 @@ namespace BusinessLogicLayer.Services.Classes
             _boardsServiceClient = boardsServiceClient;
         }
 
-        public async Task<bool> ChangeOrderState(Guid stateId, int targetOrder)
+        public async Task<bool> ChangeOrderState(StateChangeOrder stateChangeOrder)
         {
 
-            var state = await _stateRepository.GetAsync(stateId);
+            var state = await _stateRepository.GetAsync(stateChangeOrder.StateId);
 
             if (state == null)
             {
-                throw new Exception("Such state not exists");
+                throw new Exception($"Such state not exists:{stateChangeOrder.StateId}");
             }
 
             var hasAccess = await _boardsServiceClient.HasAccess(state.BoardId);
@@ -45,16 +45,16 @@ namespace BusinessLogicLayer.Services.Classes
 
             var statesByBoard = await _stateRepository.GetStatesByBoardId(state.BoardId);
 
-            if (state.Order == targetOrder)
+            if (state.Order == stateChangeOrder.OrderTarget)
             {
                 return false;
             }
 
-            if (state.Order < targetOrder)
+            if (state.Order < stateChangeOrder.OrderTarget)
             {
                 foreach (var stateInList in statesByBoard)
                 {
-                    if (stateInList.Order > state.Order && stateInList.Order <= targetOrder)
+                    if (stateInList.Order > state.Order && stateInList.Order <= stateChangeOrder.OrderTarget)
                     {
                         stateInList.Order--;
                     }
@@ -64,14 +64,14 @@ namespace BusinessLogicLayer.Services.Classes
             {
                 foreach (var stateInList in statesByBoard)
                 {
-                    if (stateInList.Order >= targetOrder && stateInList.Order < state.Order)
+                    if (stateInList.Order >= stateChangeOrder.OrderTarget && stateInList.Order < state.Order)
                     {
                         stateInList.Order++;
                     }
                 }
             }
 
-            state.Order = targetOrder;
+            state.Order = stateChangeOrder.OrderTarget;
             await _stateRepository.UpdateAsync(state);
             await _stateRepository.UpdateManyStates(statesByBoard);
             return true;
@@ -97,7 +97,7 @@ namespace BusinessLogicLayer.Services.Classes
             var state = await _stateRepository.GetAsync(stateId);
             if (state == null)
             {
-                throw new Exception("Such state not exists");
+                throw new Exception($"Such state not exists:{stateId}");
             }
 
             var hasAccess = await _boardsServiceClient.HasAccess(state.BoardId);
@@ -121,6 +121,12 @@ namespace BusinessLogicLayer.Services.Classes
             var isDeleted = await _stateRepository.DeleteAsync(stateId);
             await _stateRepository.UpdateManyStates(allStates);
             return isDeleted;
+        }
+
+        public async Task<List<StateListDTO>> GetStatesByBoard(Guid boardId)
+        {
+            var states = await _stateRepository.GetStatesByBoardId(boardId);
+            return _mapper.Map<List<StateListDTO>>(states);
         }
 
         public async Task<Guid> RenameState(StateRenameDTO stateRenameDTO)

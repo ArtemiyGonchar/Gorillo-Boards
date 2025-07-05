@@ -45,10 +45,18 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("change-state-order")]
-        public async Task<IActionResult> ChangeStateOrder([FromQuery] Guid stateId, int orderTarget)
+        public async Task<IActionResult> ChangeStateOrder([FromBody] StateChangeOrder dto)
         {
-            var changedOrder = await _stateManagementService.ChangeOrderState(stateId, orderTarget);
+            var changedOrder = await _stateManagementService.ChangeOrderState(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(changedOrder);
+        }
+
+        [HttpGet("get-states-by-board")]
+        public async Task<IActionResult> GetStatesByBoard([FromRoute] Guid boardId)
+        {
+            var states = await _stateManagementService.GetStatesByBoard(boardId);
+            return Ok(states);
         }
 
         [HttpPost("rename-state")]

@@ -12,7 +12,8 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<Guid> CreateState(StateCreateDTO stateCreateDTO);
         Task<bool> DeleteState(Guid stateId);
 
-        Task<bool> ChangeOrderState(Guid stateId, int targetOrder);
+        Task<bool> ChangeOrderState(StateChangeOrder stateChangeOrder);
         Task<Guid> RenameState(StateRenameDTO stateRenameDTO);
+        Task<List<StateListDTO>> GetStatesByBoard(Guid boardId);
     }
 }
