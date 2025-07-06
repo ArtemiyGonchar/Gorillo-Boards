@@ -107,6 +107,7 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> ChangeTicketState([FromBody] TicketChangeStateDTO dto)
         {
             var id = await _ticketManagementService.ChangeTicketState(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(id);
         }
 
