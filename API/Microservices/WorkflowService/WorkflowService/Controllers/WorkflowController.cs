@@ -76,9 +76,10 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("change-ticket-order")]
-        public async Task<IActionResult> ChangeTicketOrder([FromBody] Guid ticketId, int orderTarget)
+        public async Task<IActionResult> ChangeTicketOrder([FromBody] TicketChangeOrderDTO dto)
         {
-            var changedOrder = await _ticketManagementService.ChangeOrderTicket(ticketId, orderTarget);
+            var changedOrder = await _ticketManagementService.ChangeOrderTicket(dto.Id, dto.OrderTarget);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(changedOrder);
         }
 
