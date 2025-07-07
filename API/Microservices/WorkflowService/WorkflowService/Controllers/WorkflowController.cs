@@ -72,6 +72,7 @@ namespace PresentationLayer.Controllers
             var requestorId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             dto.UserRequestor = Guid.Parse(requestorId);
             var id = await _ticketManagementService.CreateTicket(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(id);
         }
 
