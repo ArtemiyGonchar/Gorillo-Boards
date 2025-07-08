@@ -24,6 +24,18 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
         }
 
+        public async Task<GetUserDTO> GetUserById(Guid Id)
+        {
+            var user = await _userRepository.GetAsync(Id);
+            if (user == null) //cheking if user is in db
+            {
+                throw new Exception("No such user");
+            }
+
+            var userMapped = _mapper.Map<GetUserDTO>(user);
+            return userMapped;
+        }
+
         public async Task<UserJwtDTO> LoginUser(UserLoginDTO userLoginDTO)
         {
 

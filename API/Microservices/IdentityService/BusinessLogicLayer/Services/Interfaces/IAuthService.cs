@@ -10,5 +10,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     public interface IAuthService
     {
         Task<UserJwtDTO> LoginUser(UserLoginDTO userLoginDTO);
+        Task<GetUserDTO> GetUserById(Guid Id);
     }
 }
