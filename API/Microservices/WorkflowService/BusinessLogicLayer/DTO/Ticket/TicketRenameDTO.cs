@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.DTO.Ticket
 {
     public class TicketRenameDTO
     {
+        public Guid BoardId { get; set; }
         public Guid Id { get; set; }
         public string Title { get; set; }
     }

@@ -95,6 +95,7 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> RenameTicket([FromBody] TicketRenameDTO dto)
         {
             var id = await _ticketManagementService.RenameTicket(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(id);
         }
 
