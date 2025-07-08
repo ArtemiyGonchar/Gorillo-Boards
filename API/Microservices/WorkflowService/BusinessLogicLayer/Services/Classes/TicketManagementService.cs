@@ -31,18 +31,18 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = await _ticketRepository.GetAsync(ticketAssigneUserDTO.TicketId);
             if (ticket == null)
             {
-                throw new Exception($"Such ticket not exists: {ticketAssigneUserDTO.TicketId}");
+                throw new Exception($"Such ticket not exists");
             }
 
             if (ticket.IsClosed)
             {
-                throw new Exception($"This ticket is closed: {ticketAssigneUserDTO.TicketId}");
+                throw new Exception($"This ticket is closed");
             }
 
             var timeLog = await _logRepository.GetInProgressLogByTicket(ticketAssigneUserDTO.TicketId);
             if (timeLog != null)
             {
-                throw new Exception($"This ticket in progress by another user: {ticketAssigneUserDTO.TicketId}");
+                throw new Exception($"This ticket in progress by another user");
             }
 
             ticket.UserAssigned = ticketAssigneUserDTO.UserId;

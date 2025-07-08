@@ -36,5 +36,12 @@ namespace DataAccessLayer.Repositories
             return await _ctx.Set<TicketTimeLog>()
                 .FirstOrDefaultAsync(l => l.TicketId == ticketId && l.EndedAt == null);
         }
+
+        public async Task<List<TicketTimeLog>> GetAllByUserAndTicket(Guid userId, Guid ticketId)
+        {
+            return await _ctx.Set<TicketTimeLog>()
+                .Where(l => l.TicketId == ticketId && l.UserId == userId)
+                .ToListAsync();
+        }
     }
 }

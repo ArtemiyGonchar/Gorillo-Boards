@@ -29,28 +29,30 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = await _ticketRepository.GetAsync(ticketEndWorkDTO.TicketId);
             if (ticket == null)
             {
-                throw new Exception($"Such ticket not exists: {ticketEndWorkDTO.TicketId}");
+                throw new Exception($"Such ticket not exists");
             }
 
             if (ticket.IsClosed)
             {
-                throw new Exception($"This ticket is closed: {ticket.Id}");
+                throw new Exception($"This ticket is closed");
             }
 
             if (ticket.UserAssigned != ticketEndWorkDTO.UserId)
             {
-                throw new Exception($"Only assigned user can end work on tickets: {ticket.Id}");
+                throw new Exception($"Only assigned user can end work on tickets");
             }
 
-            var timeLog = await _timeLogRepository.GetByUserAndTicket(ticketEndWorkDTO.UserId, ticketEndWorkDTO.TicketId);
+            var timeLogs = await _timeLogRepository.GetAllByUserAndTicket(ticketEndWorkDTO.UserId, ticketEndWorkDTO.TicketId);
 
-            if (timeLog == null)
+            var activeLog = timeLogs.FirstOrDefault(l => l.EndedAt == null);
+
+            if (activeLog == null)
             {
-                throw new Exception($"No work found on this ticket: {ticketEndWorkDTO.TicketId}");
+                throw new Exception($"No active work found on this ticket");
             }
 
-            timeLog.EndedAt = DateTime.UtcNow;
-            var timeLogId = await _timeLogRepository.UpdateAsync(timeLog);
+            activeLog.EndedAt = DateTime.UtcNow;
+            var timeLogId = await _timeLogRepository.UpdateAsync(activeLog);
 
             return timeLogId;
         }
@@ -60,30 +62,31 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = await _ticketRepository.GetAsync(ticketStartWorkDTO.TicketId);
             if (ticket == null)
             {
-                throw new Exception($"Such ticket not exists: {ticketStartWorkDTO.TicketId}");
+                throw new Exception($"Such ticket not exists");
             }
 
             if (ticket.IsClosed)
             {
-                throw new Exception($"This ticket is closed: {ticket.Id}");
+                throw new Exception($"This ticket is closed");
             }
 
             if (ticket.UserAssigned == null)
             {
-                throw new Exception($"Assign yourself to ticket first: {ticket.Id}");
+                throw new Exception($"Assign yourself to ticket first");
             }
 
             if (ticket.UserAssigned != ticketStartWorkDTO.UserId)
             {
-                throw new Exception($"Only assigned user can start work on tickets: {ticket.Id}");
+                throw new Exception($"Only assigned user can start work on tickets");
             }
 
-            var timeLog = await _timeLogRepository.GetByUserAndTicket(ticketStartWorkDTO.UserId, ticketStartWorkDTO.TicketId);
+            var timeLogs = await _timeLogRepository.GetAllByUserAndTicket(ticketStartWorkDTO.UserId, ticketStartWorkDTO.TicketId);
 
-            if (timeLog != null && timeLog.EndedAt == null)
+            if (timeLogs.Any(l => l.EndedAt == null))
             {
-                throw new Exception($"Work already stared on this ticket: {ticketStartWorkDTO.TicketId}");
+                throw new Exception($"Work already started on this ticket");
             }
+
 
             var timeLogMapped = _mapper.Map<TicketTimeLog>(ticketStartWorkDTO);
             timeLogMapped.StartedAt = DateTime.UtcNow;
