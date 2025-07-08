@@ -15,5 +15,7 @@ namespace BusinessLogicLayer.DTO.Ticket
         public Guid StateId { get; set; }
         public Guid? TicketLabelId { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Guid? UserRequestor { get; set; }
+        public Guid? UserAssigned { get; set; }
     }
 }
