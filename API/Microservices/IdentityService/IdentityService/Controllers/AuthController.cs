@@ -41,5 +41,13 @@ namespace PresentationLayer.Controllers
             return Ok(true);
         }
 
+        [Authorize]
+        [HttpPost("get-user-by-id")]
+        public async Task<IActionResult> GetUserById(Guid Id)
+        {
+            var user = await _authService.GetUserById(Id);
+            return Ok(user);
+        }
+
     }
 }
