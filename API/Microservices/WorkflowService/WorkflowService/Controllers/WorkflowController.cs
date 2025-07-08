@@ -129,6 +129,7 @@ namespace PresentationLayer.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             dto.UserId = Guid.Parse(userId);
             var timeLogId = await _timeLogService.TicketWorkStart(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(timeLogId);
         }
 
@@ -138,6 +139,7 @@ namespace PresentationLayer.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             dto.UserId = Guid.Parse(userId);
             var timeLogId = await _timeLogService.TicketWorkEnd(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(timeLogId);
         }
 

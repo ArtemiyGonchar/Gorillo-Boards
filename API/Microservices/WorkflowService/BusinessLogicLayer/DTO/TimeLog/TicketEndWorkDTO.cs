@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.DTO.TimeLog
 {
     public class TicketEndWorkDTO
     {
+        public Guid BoardId { get; set; }
         public Guid TicketId { get; set; }
         public Guid UserId { get; set; }
     }
