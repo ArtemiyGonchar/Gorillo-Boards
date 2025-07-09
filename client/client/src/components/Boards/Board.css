@@ -1,0 +1,29 @@
+/*.states-container{*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    overflow-x: auto;*/
+/*    padding: 8px;*/
+/*    height: 100%;*/
+/*}*/
+
+/*.states-wrapper{*/
+/*    height: calc(100vh - 58px);*/
+/*    overflow-x: auto;*/
+/*    overflow-y: hidden;*/
+/*}*/
+
+.states-wrapper {
+    height: calc(100vh - 100px); /* Высота минус хедер */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Главный контейнер без скролла */
+}
+
+.states-container {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto; /* Горизонтальный скролл */
+    padding: 8px;
+    min-height: 0; /* Критически важно для flex-скролла */
+    flex: 1; /* Занимает все доступное пространство */
+}

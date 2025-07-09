@@ -5,66 +5,165 @@ import {useEffect, useState} from "react";
 import {get_board_by_id, has_access_to_board} from "../../api/boardsApi.js";
 import {HeaderFilter} from "../Header/HeaderFilter.jsx";
 import {HubConnectionBuilder} from "@microsoft/signalr";
+import State from "../State/State.jsx";
+import {change_ticket_state, change_tickets_order, get_states_by_board, getTickets} from "../../api/workflowApi.js";
+import './Board.css';
+import '../../styles/global.css'
+
+import {
+    closestCenter,
+    closestCorners,
+    DndContext,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
+
+import {horizontalListSortingStrategy, SortableContext, sortableKeyboardCoordinates} from "@dnd-kit/sortable";
+import TicketDialog from "../Ticket/TicketDialog.jsx";
 
 export default function Board() {
     const params = useParams();
     const {user, loadingUser} = useGetUser();
     const [board, setBoard] = useState();
-
-    console.log(user);
+    const [states, setStates] = useState([]);
     const navigate = useNavigate();
-    //console.log(params.boardId);
+    const [ticketsByState, setTicketsByState] = useState({});
+    const [openTicket, setOpenTicket] = useState(null);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates
+        })
+    );
 
     useEffect(() => {
         const hasAccess = async () => {
             const response = await has_access_to_board(params.boardId);
-            console.log("Access ", response);
         }
 
         const getBoard = async (boardId) => {
             const response = await get_board_by_id(params.boardId);
-            console.log("board ", response.data);
             setBoard(response.data);
         }
 
-        hasAccess().catch(() => navigate('/boards/')).then(() => getBoard());
+        const fetchStates = async (boardId) => {
+            const response = await get_states_by_board(params.boardId);
+            setStates(response.data);
+            return response.data;
+        }
 
+        const fetchTickets = async (statesData) => {
+            const ticketsMap = {};
+            for (const state of statesData) {
+                const response = await getTickets(params.boardId, state.id);
+                ticketsMap[state.id] = response.data;
+            }
+            setTicketsByState(ticketsMap);
+        }
+
+        const init = async () => {
+            try
+            {
+                await hasAccess().catch(() => {
+                    return navigate('/boards/');
+                });
+                await getBoard();
+                const statesData = await fetchStates();
+                //console.log(statesData);
+                await fetchTickets(statesData);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        init();
         const connection = new HubConnectionBuilder()
             .withUrl("https://localhost:7007/workflowhub")
             .withAutomaticReconnect()
             .build();
 
         connection.start().then(() => {
-            console.log("Connected to Hub");
             connection.invoke("JoinGroup", params.boardId);
         })
             .catch(error => console.error(error));
 
-        connection.on("WorkflowUpdated", (boardId)  => {
-            console.log("Workflow updated", boardId);
-            // тут сделаю фетч
-        });
+        const reloadAllData = async () => {
+            const [boardRes, statesRes] = await Promise.all([
+                get_board_by_id(params.boardId),
+                get_states_by_board(params.boardId)
+            ]);
 
+            setBoard(boardRes.data);
+            setStates(statesRes.data);
+
+            const ticketsMap = {};
+            for (const state of statesRes.data) {
+                const tickets = await getTickets(params.boardId, state.id);
+                ticketsMap[state.id] = tickets.data;
+            }
+            setTicketsByState(ticketsMap);
+            console.log('reloaddata');
+        };
+        connection.on("WorkflowUpdated", reloadAllData);
     }, [params.boardId]);
-/*
-    const connectToHub = async () => {
-        var connection = new HubConnectionBuilder()
-            .withUrl("http://localhost:7007/workflowhub")
-            .withAutomaticReconnect()
-            .build();
 
-        connection.start().then(() => {
-            console.log("Connected to Hub");
-            connection.invoke("JoinGroup", params.boardId);
-        })
-            .catch(error => console.error(error));
+    const handleDragEnd = async (event) => {
+        const {active, over} = event;
 
-        connection.on("WorkflowUpdated", (boardId)  => {
-            console.log("Workflow updated", boardId);
-            // тут сделаю фетч
-        });
-    };
-*/
+        const activeTicketData = active.data.current.ticket;
+        const overTicketData = over.data.current.ticket;
+
+        const isOverTicket = over.data.current.type ==='ticket';
+        const isOverState = over.data.current.type === 'state';
+
+        if (!(active.id === over.id)){
+            if(isOverTicket){
+                if(activeTicketData.stateId === overTicketData.stateId){
+                    console.log("order before sending to data", overTicketData.order);
+
+                    await  change_tickets_order(params.boardId, active.id, overTicketData.order);
+                }
+            }
+
+        }
+    }
+
+    const handleDragOver = async (event) => {
+        const {active, over} = event;
+
+        const activeTicketData = active.data.current.ticket;
+        const overTicketData = over.data.current.ticket;
+
+        const isOverTicket = over.data.current.type ==='ticket';
+        const isOverState = over.data.current.type === 'state';
+
+        const fromStateId = activeTicketData.stateId;
+
+        if (!(active.id === over.id)){
+
+            if(isOverState){
+                await change_ticket_state(params.boardId,active.id, over.id);
+            }
+            if(isOverTicket){
+                if(!(activeTicketData.stateId === overTicketData.stateId)){
+                    await change_ticket_state(params.boardId,active.id, overTicketData.stateId);
+                }
+            }
+        }
+    }
+
+    const handleOpenTicket = async (ticket) => {
+        setOpenTicket(ticket);
+        console.log('openticket', ticket);
+    }
+
+    const handleCloseTicket = async () => {
+        setOpenTicket(null);
+    }
+
     if(loadingUser) {
         return (
             <>
@@ -74,13 +173,32 @@ export default function Board() {
         );
     }
 
+    if(states.length === 0) {
+        return (
+            <>loading</>
+        );
+    }
+
 
 
     return(
         <>
             <Header username={user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]}/>
             <HeaderFilter board={board} />
-            <div>123</div>
+
+            {openTicket && (
+                <TicketDialog ticket={openTicket} closeDialog={handleCloseTicket}/>
+            )}
+
+            <div className='states-wrapper'>
+                <DndContext  onDragEnd={handleDragEnd} onDragOver={handleDragOver} sensors={sensors}>
+                    <div className='states-container'>
+                                {states.map(state => (
+                                    <State board={board} state={state} key={state.id} tickets={ticketsByState[state.id]} onTicketClick={handleOpenTicket} />
+                                ))}
+                    </div>
+                </DndContext>
+            </div>
         </>
     );
 }
