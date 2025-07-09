@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.DTO.Label
 {
     public class DeleteLabelFromTicketDTO
     {
+        public Guid BoardId { get; set; }
         public Guid TicketId { get; set; }
     }
 }

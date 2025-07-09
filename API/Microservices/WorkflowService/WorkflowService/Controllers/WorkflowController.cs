@@ -1,7 +1,9 @@
-﻿using BusinessLogicLayer.DTO.State;
+﻿using BusinessLogicLayer.DTO.Label;
+using BusinessLogicLayer.DTO.State;
 using BusinessLogicLayer.DTO.Ticket;
 using BusinessLogicLayer.DTO.TimeLog;
 using BusinessLogicLayer.Services.Interfaces;
+using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -18,15 +20,17 @@ namespace PresentationLayer.Controllers
         private readonly IStateManagementService _stateManagementService;
         private readonly ITicketManagementService _ticketManagementService;
         private readonly ITimeLogService _timeLogService;
+        private readonly ITicketLabelRepository _labelRepository;
         private readonly IHubContext<WorkflowHub> _hubContext;
 
         public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService
-            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext)
+            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext, ITicketLabelRepository labelRepository)
         {
             _stateManagementService = stateManagementService;
             _ticketManagementService = ticketManagementService;
             _timeLogService = timeLogService;
             _hubContext = hubContext;
+            _labelRepository = labelRepository;
         }
 
         [HttpPost("create-state")]
@@ -169,6 +173,13 @@ namespace PresentationLayer.Controllers
             var inProgress = await _timeLogService.TicketInProgress(dto);
             //await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(inProgress);
+        }
+
+        [HttpPost("get-labels-by-board")]
+        public async Task<IActionResult> GetLabelsByBoard([FromBody] GetLabelsByBoardDTO dto)
+        {
+            var labels = _labelRepository.GetAllLabelsByBoard(dto.BoardId);
+            return Ok(labels);
         }
     }
 }

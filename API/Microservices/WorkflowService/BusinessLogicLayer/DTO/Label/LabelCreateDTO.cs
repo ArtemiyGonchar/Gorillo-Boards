@@ -8,7 +8,7 @@ namespace BusinessLogicLayer.DTO.Label
 {
     public class LabelCreateDTO
     {
-        public string Title { get; set; }
         public Guid BoardId { get; set; }
+        public string Title { get; set; }
     }
 }

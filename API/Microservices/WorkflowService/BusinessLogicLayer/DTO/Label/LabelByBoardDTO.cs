@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.DTO.Label
 {
-    public class AddLabelToTicketDTO
+    public class LabelByBoardDTO
     {
-        public Guid BoardId { get; set; }
-        public Guid LabelId { get; set; }
-        public Guid TicketId { get; set; }
+        public string Title { get; set; }
     }
 }
