@@ -16,7 +16,7 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<Guid> ChangeDescriptionTicket(TicketChangeDescription ticketChangeDescription);
         Task<Guid> ChangeTicketState(TicketChangeStateDTO ticketChangeStateDTO);
         Task<Guid> CloseTicket(TicketCloseDTO ticketCloseDTO);
-        Task<Guid> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO);
+        Task<TicketUserAssignedDTO> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO);
 
         Task<List<TicketListDTO>> GetTicketsByState(TicketGetByState ticketGetByState);
     }

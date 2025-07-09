@@ -26,7 +26,7 @@ namespace BusinessLogicLayer.Services.Classes
             _logRepository = timeLogRepository;
         }
 
-        public async Task<Guid> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO)
+        public async Task<TicketUserAssignedDTO> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO)
         {
             var ticket = await _ticketRepository.GetAsync(ticketAssigneUserDTO.TicketId);
             if (ticket == null)
@@ -47,7 +47,9 @@ namespace BusinessLogicLayer.Services.Classes
 
             ticket.UserAssigned = ticketAssigneUserDTO.UserId;
             var ticketId = await _ticketRepository.UpdateAsync(ticket);
-            return ticketId;
+
+            var userAssigned = new TicketUserAssignedDTO { Id = ticketId, UserId = ticketAssigneUserDTO.UserId };
+            return userAssigned;
         }
 
         public async Task<Guid> ChangeDescriptionTicket(TicketChangeDescription ticketChangeDescription)
