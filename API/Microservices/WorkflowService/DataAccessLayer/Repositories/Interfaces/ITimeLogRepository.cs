@@ -12,6 +12,7 @@ namespace DataAccessLayer.Repositories.Interfaces
         Task<TicketTimeLog?> GetByUserAndTicket(Guid userId, Guid ticketId);
         Task<TicketTimeLog?> GetByTicket(Guid ticketId);
         Task<TicketTimeLog?> GetInProgressLogByTicket(Guid ticketId);
+        Task<List<TicketTimeLog>> GetAllInProgressLogByTicket(Guid ticketId);
         Task<List<TicketTimeLog>> GetAllByUserAndTicket(Guid userId, Guid ticketId);
     }
 }

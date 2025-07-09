@@ -11,5 +11,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     {
         Task<Guid> TicketWorkStart(TicketStartWorkDTO ticketStartWorkDTO);
         Task<Guid> TicketWorkEnd(TicketEndWorkDTO ticketEndWorkDTO);
+        Task<bool> TicketInProgress(TicketInProgressDTO ticketInProgressDTO);
     }
 }

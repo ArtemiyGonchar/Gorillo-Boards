@@ -24,6 +24,24 @@ namespace BusinessLogicLayer.Services.Classes
             _ticketRepository = ticketRepository;
         }
 
+        public async Task<bool> TicketInProgress(TicketInProgressDTO ticketInProgressDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketInProgressDTO.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception($"Such ticket not exists");
+            }
+
+            var timeLog = await _timeLogRepository.GetInProgressLogByTicket(ticketInProgressDTO.TicketId);
+
+            if (timeLog == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<Guid> TicketWorkEnd(TicketEndWorkDTO ticketEndWorkDTO)
         {
             var ticket = await _ticketRepository.GetAsync(ticketEndWorkDTO.TicketId);

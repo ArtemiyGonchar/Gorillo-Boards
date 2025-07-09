@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.DTO.Ticket
+namespace BusinessLogicLayer.DTO.TimeLog
 {
-    public class TicketChangeDescription
+    public class TicketInProgressDTO
     {
         public Guid BoardId { get; set; }
-        public Guid Id { get; set; }
-        public string Description { get; set; }
+        public Guid TicketId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

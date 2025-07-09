@@ -103,6 +103,7 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> ChangeTicketDescription([FromBody] TicketChangeDescription dto)
         {
             var id = await _ticketManagementService.ChangeDescriptionTicket(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(id);
         }
 
@@ -158,6 +159,16 @@ namespace PresentationLayer.Controllers
         {
             var tickets = await _ticketManagementService.GetTicketsByState(dto);
             return Ok(tickets);
+        }
+
+        [HttpPost("is-ticket-in-progress")]
+        public async Task<IActionResult> TicketInProgress([FromBody] TicketInProgressDTO dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserId = Guid.Parse(userId);
+            var inProgress = await _timeLogService.TicketInProgress(dto);
+            //await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            return Ok(inProgress);
         }
     }
 }

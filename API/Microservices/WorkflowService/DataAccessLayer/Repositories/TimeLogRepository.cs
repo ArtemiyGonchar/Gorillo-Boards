@@ -43,5 +43,12 @@ namespace DataAccessLayer.Repositories
                 .Where(l => l.TicketId == ticketId && l.UserId == userId)
                 .ToListAsync();
         }
+
+        public async Task<List<TicketTimeLog>> GetAllInProgressLogByTicket(Guid ticketId)
+        {
+            return await _ctx.Set<TicketTimeLog>()
+                .Where(l => l.TicketId == ticketId && l.EndedAt == null)
+                .ToListAsync();
+        }
     }
 }
