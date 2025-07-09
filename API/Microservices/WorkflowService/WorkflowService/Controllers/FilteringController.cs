@@ -37,5 +37,12 @@ namespace PresentationLayer.Controllers
             var ticketId = await _filteringService.DeleteLabelFromTicket(dto);
             return Ok(ticketId);
         }
+
+        [HttpPost("get-label")]
+        public async Task<IActionResult> GetLabel(LabelByIdDTO dto)
+        {
+            var label = _filteringService.GetLabelById(dto);
+            return Ok(label);
+        }
     }
 }

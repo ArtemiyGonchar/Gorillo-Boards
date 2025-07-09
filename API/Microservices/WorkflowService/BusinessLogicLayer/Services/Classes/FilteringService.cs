@@ -78,6 +78,17 @@ namespace BusinessLogicLayer.Services.Classes
             return ticketId;
         }
 
+        public async Task<GetLabelDTO> GetLabelById(LabelByIdDTO labelByIdDTO)
+        {
+            var label = await _labelRepository.GetAsync(labelByIdDTO.Id);
+            if (label == null)
+            {
+                throw new Exception("Such label not exists");
+            }
+
+            return _mapper.Map<GetLabelDTO>(label);
+        }
+
         public async Task<List<LabelByBoardDTO>> GetLabelsByBoard(GetLabelsByBoardDTO getLabelsByBoardDTO)
         {
             var board = await _boardRepository.GetAsync(getLabelsByBoardDTO.BoardId);

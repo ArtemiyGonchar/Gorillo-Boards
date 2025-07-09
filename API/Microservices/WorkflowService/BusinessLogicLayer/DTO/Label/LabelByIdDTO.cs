@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.DTO.Label
 {
-    public class LabelByBoardDTO
+    public class LabelByIdDTO
     {
+        public Guid BoardId { get; set; }
         public Guid Id { get; set; }
         public string Title { get; set; }
     }

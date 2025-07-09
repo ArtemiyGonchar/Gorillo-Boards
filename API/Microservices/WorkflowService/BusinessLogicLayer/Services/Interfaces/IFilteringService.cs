@@ -13,5 +13,6 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<Guid> AddLabelToTicket(AddLabelToTicketDTO addLabelToTicket);
         Task<Guid> DeleteLabelFromTicket(DeleteLabelFromTicketDTO deleteLabelFromTicket);
         Task<List<LabelByBoardDTO>> GetLabelsByBoard(GetLabelsByBoardDTO getLabelsByBoardDTO);
+        Task<GetLabelDTO> GetLabelById(LabelByIdDTO labelByIdDTO);
     }
 }
