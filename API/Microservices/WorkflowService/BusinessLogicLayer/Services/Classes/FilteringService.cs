@@ -86,7 +86,12 @@ namespace BusinessLogicLayer.Services.Classes
                 throw new Exception($"Such board not exists");
             }
 
-            var labels = _labelRepository.GetAllLabelsByBoard(getLabelsByBoardDTO.BoardId);
+            var labels = await _labelRepository.GetAllLabelsByBoard(getLabelsByBoardDTO.BoardId);
+            if (labels == null)
+            {
+                throw new Exception("No labels by this board");
+            }
+
             return _mapper.Map<List<LabelByBoardDTO>>(labels);
         }
     }

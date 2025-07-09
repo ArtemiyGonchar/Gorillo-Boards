@@ -19,9 +19,9 @@ namespace DataAccessLayer.Repositories
             _ctx = ctx;
         }
 
-        public Task<List<TicketLabel>> GetAllLabelsByBoard(Guid boardId)
+        public async Task<List<TicketLabel>> GetAllLabelsByBoard(Guid boardId)
         {
-            return _ctx.Set<TicketLabel>().Where(l => l.BoardId == boardId).ToListAsync();
+            return await _ctx.Set<TicketLabel>().Where(l => l.BoardId == boardId).ToListAsync();
         }
     }
 }

@@ -20,17 +20,18 @@ namespace PresentationLayer.Controllers
         private readonly IStateManagementService _stateManagementService;
         private readonly ITicketManagementService _ticketManagementService;
         private readonly ITimeLogService _timeLogService;
-        private readonly ITicketLabelRepository _labelRepository;
+        private readonly IFilteringService _filteringService;
         private readonly IHubContext<WorkflowHub> _hubContext;
 
         public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService
-            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext, ITicketLabelRepository labelRepository)
+            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext, IFilteringService filteringService)
         {
             _stateManagementService = stateManagementService;
             _ticketManagementService = ticketManagementService;
             _timeLogService = timeLogService;
             _hubContext = hubContext;
-            _labelRepository = labelRepository;
+            _filteringService = filteringService;
+
         }
 
         [HttpPost("create-state")]
@@ -178,7 +179,7 @@ namespace PresentationLayer.Controllers
         [HttpPost("get-labels-by-board")]
         public async Task<IActionResult> GetLabelsByBoard([FromBody] GetLabelsByBoardDTO dto)
         {
-            var labels = _labelRepository.GetAllLabelsByBoard(dto.BoardId);
+            var labels = await _filteringService.GetLabelsByBoard(dto);
             return Ok(labels);
         }
     }
