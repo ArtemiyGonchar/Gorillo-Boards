@@ -3,6 +3,7 @@ using BusinessLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Extenstions;
+using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
 {
@@ -43,11 +44,22 @@ namespace PresentationLayer.Controllers
 
         [Authorize]
         [HttpPost("get-user-by-id")]
-        public async Task<IActionResult> GetUserById(Guid Id)
+        public async Task<IActionResult> GetUserById(GetUserByIdDTO dto)
         {
-            var user = await _authService.GetUserById(Id);
+            var user = await _authService.GetUserById(dto.Id);
             return Ok(user);
         }
 
+        [Authorize]
+        [HttpGet("user-is-admin")]
+        public async Task<IActionResult> isAdmin()
+        {
+            var role = User.FindFirst(ClaimTypes.Role).Value;
+            if (role == "Admin")
+            {
+                return Ok(true);
+            }
+            return Ok(false);
+        }
     }
 }
