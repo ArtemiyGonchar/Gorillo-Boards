@@ -74,3 +74,11 @@ export const start_work_on_ticket = async (BoardId,TicketId) => {
 export const end_work_on_ticket = async (BoardId,TicketId) => {
     return api.post(`boards/${BoardId}/states/end-work-on-ticket`, {BoardId,TicketId});
 }
+
+export const is_ticket_in_progress = async (BoardId,TicketId) => {
+    return api.post(`boards/${BoardId}/states/is-ticket-in-progress`, {BoardId,TicketId});
+}
+
+export const change_ticket_description = async (BoardId ,Id, Description) => {
+    return api.post(`boards/${BoardId}/states/change-ticket-description`, {BoardId,Id, Description});
+}

@@ -1,6 +1,12 @@
 import './TicketDialog.css';
 import {useEffect, useState} from "react";
-import {assign_to_ticket, rename_ticket, start_work_on_ticket, end_work_on_ticket} from "../../api/workflowApi.js";
+import {
+    assign_to_ticket,
+    rename_ticket,
+    start_work_on_ticket,
+    end_work_on_ticket,
+    is_ticket_in_progress, change_ticket_description
+} from "../../api/workflowApi.js";
 import {useParams} from "react-router-dom";
 import {get_user} from "../../api/identityApi.js";
 import { TfiFaceSmile } from "react-icons/tfi";
@@ -8,39 +14,42 @@ import { TfiFaceSad } from "react-icons/tfi";
 export default function TicketDialog({ticket, closeDialog}) {
     const [editedTicket, setEditedTicket] = useState(ticket);
     const params = useParams();
+
     const [editTitle, setEditTitle] = useState(editedTicket.title);
     const [isEditingTitle, setEditingTitle] = useState(false);
+
     const [requestor, setRequestor] = useState('');
     const [assigner, setAssigner] = useState('');
+    const [ticketInProgress, setTicketInProgress] = useState(false);
 
-    async function fetchUser() {
+    const [editDescription, setEditDescription] = useState(editedTicket.description || '');
+    const [isEditingDescription, setEditingDescription] = useState(false);
+
+    async function fetchInfo() {
         try {
-            console.log(editedTicket.userRequestor)
+            console.log(editedTicket)
             const responseReq = await get_user(editedTicket.userRequestor);
             setRequestor(responseReq.data);
-            console.log(editedTicket.userAssigned)
             if(editedTicket.userAssigned)
             {
                 const responseAs = await get_user(editedTicket.userAssigned);
-                console.log(responseAs);
                 setAssigner(responseAs.data);
             }
-
-            //console.log(responseReq.data.displayName);
+            const inProg = await is_ticket_in_progress(params.boardId, ticket.id);
+            setTicketInProgress(inProg.data);
 
         } catch (error) {
-            console.error("Failed to fetch user", error);
+            console.error(error);
         }
     }
 
     useEffect(() => {
-        fetchUser();
+        fetchInfo();
     }, [ticket]);
 
 
     const handleEditTitle = () => {
         setEditingTitle(true);
-        console.log("Editing ticket...");
         console.log(editedTicket);
     }
 
@@ -57,11 +66,7 @@ export default function TicketDialog({ticket, closeDialog}) {
     const handleAssignee = async () => {
         try{
             const response = await assign_to_ticket(params.boardId, editedTicket.id);
-            console.log('Assigned ticket', response.data);
-            // fetchUser();
-            //setAssigner(assigner);
             const responseAs = await get_user(response.data.userId);
-            console.log(responseAs.data.displayName);
             setAssigner(responseAs.data);
         } catch (error) {
             console.log(error);
@@ -71,6 +76,7 @@ export default function TicketDialog({ticket, closeDialog}) {
     const handleStartWorking = async () => {
         try{
             await start_work_on_ticket(params.boardId, editedTicket.id);
+            setTicketInProgress(true);
         } catch (error) {
             console.log(error);
         }
@@ -79,11 +85,21 @@ export default function TicketDialog({ticket, closeDialog}) {
     const handleEndWorking = async () => {
         try{
             await end_work_on_ticket(params.boardId, editedTicket.id);
-            console.log("end working ticket...");
+            setTicketInProgress(false);
         } catch (error) {
             console.log(error);
         }
     }
+
+    const handleSaveDescription = async () => {
+        editedTicket.description = editDescription;
+        await change_ticket_description(params.boardId, editedTicket.id, editDescription);
+        setEditingDescription(false);
+    }
+
+    const handleEditDescription = () => setEditingDescription(true);
+    const handleCancelEditDescription = () => setEditingDescription(false);
+
     return (
         <>
             <div className='dialog'>
@@ -115,8 +131,34 @@ export default function TicketDialog({ticket, closeDialog}) {
                     </div>
 
                     <div className="dialog-timeflow">
-                        <div className='dialog-timeflow-button' onClick={handleStartWorking}>Start working</div>
-                        <div className='dialog-timeflow-button' onClick={handleEndWorking}>End working</div>
+                        {ticketInProgress
+                            ? <div className='dialog-timeflow-button' onClick={handleEndWorking}>End working</div>
+                            : <div className='dialog-timeflow-button' onClick={handleStartWorking}>Start working</div>
+                        }
+                    </div>
+
+                    <div className='dialog-description'>
+                        {!isEditingDescription && (
+                            <div onClick={handleEditDescription}>
+                                <p>{editedTicket.description || 'Click to add description'}</p>
+                            </div>
+                        )}
+                        {isEditingDescription && (
+                            <div>
+                                <textarea
+                                    value={editDescription}
+                                    onChange={(e) => {
+                                        setEditDescription(e.target.value);
+                                        e.target.style.height = "auto";
+                                        e.target.style.height = e.target.scrollHeight + "px";
+                                    }}
+                                    rows={4}
+                                    cols={40}
+                                />
+                                <button onClick={handleSaveDescription} className='dialog-header-title-save'>Save</button>
+                                <button onClick={handleCancelEditDescription} className='dialog-header-title-cancel'>X</button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
