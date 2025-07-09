@@ -59,6 +59,18 @@ namespace BusinessLogicLayer.Services.Classes
             return labelId;
         }
 
+        public async Task<bool> DeleteLabelById(DeleteLabelDTO labelByIdDTO)
+        {
+            var label = await _labelRepository.GetAsync(labelByIdDTO.Id);
+            if (label == null)
+            {
+                throw new Exception("No such label exists");
+            }
+
+            var deleted = await _labelRepository.DeleteAsync(labelByIdDTO.Id);
+            return deleted;
+        }
+
         public async Task<Guid> DeleteLabelFromTicket(DeleteLabelFromTicketDTO deleteLabelFromTicket)
         {
             var ticket = await _ticketRepository.GetAsync(deleteLabelFromTicket.TicketId);
