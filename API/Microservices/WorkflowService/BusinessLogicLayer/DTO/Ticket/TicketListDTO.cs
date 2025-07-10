@@ -12,6 +12,7 @@ namespace BusinessLogicLayer.DTO.Ticket
         public string Title { get; set; }
         public string? Description { get; set; }
         public int Order { get; set; }
+        public bool IsClosed { get; set; }
         public Guid StateId { get; set; }
         public Guid? TicketLabelId { get; set; }
         public DateTime CreatedAt { get; set; }
