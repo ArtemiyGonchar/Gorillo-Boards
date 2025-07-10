@@ -24,6 +24,18 @@ namespace BusinessLogicLayer.Services.Classes
             _ticketRepository = ticketRepository;
         }
 
+        public async Task<List<TimeLogListDTO>> GetTimeLogsByTicket(GetTimeLogsByTicketDTO getTimeLogsByTicketDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(getTimeLogsByTicketDTO.TicketId);
+            if (ticket == null)
+            {
+                throw new Exception($"Such ticket not exists");
+            }
+
+            var timeLogs = await _timeLogRepository.GetAllLogsByTicket(getTimeLogsByTicketDTO.TicketId);
+            return _mapper.Map<List<TimeLogListDTO>>(timeLogs);
+        }
+
         public async Task<bool> TicketInProgress(TicketInProgressDTO ticketInProgressDTO)
         {
             var ticket = await _ticketRepository.GetAsync(ticketInProgressDTO.TicketId);

@@ -182,5 +182,12 @@ namespace PresentationLayer.Controllers
             var labels = await _filteringService.GetLabelsByBoard(dto);
             return Ok(labels);
         }
+
+        [HttpPost("get-timelogs-by-ticket")]
+        public async Task<IActionResult> GetTimeLogsByTicket([FromBody] GetTimeLogsByTicketDTO dto)
+        {
+            var timeLogs = await _timeLogService.GetTimeLogsByTicket(dto);
+            return Ok(timeLogs);
+        }
     }
 }

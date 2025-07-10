@@ -25,7 +25,16 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> CreateLabel(LabelCreateDTO dto)
         {
             var labelId = await _filteringService.CreateLabel(dto);
+            //await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
             return Ok(labelId);
+        }
+
+        [HttpPost("delete-label")]
+        public async Task<IActionResult> DeleteLabel(DeleteLabelDTO dto)
+        {
+            var deleted = await _filteringService.DeleteLabelById(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            return Ok(deleted);
         }
 
         [HttpPost("add-label-to-ticket")]
@@ -50,5 +59,6 @@ namespace PresentationLayer.Controllers
             var label = await _filteringService.GetLabelById(dto);
             return Ok(label);
         }
+
     }
 }

@@ -33,6 +33,7 @@ namespace BusinessLogicLayer.Mapping
 
 
             CreateMap<TicketTimeLog, TicketStartWorkDTO>().ReverseMap();
+            CreateMap<TicketTimeLog, TimeLogListDTO>().ReverseMap();
         }
     }
 }
