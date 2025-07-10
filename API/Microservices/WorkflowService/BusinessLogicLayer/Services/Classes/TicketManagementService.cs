@@ -191,9 +191,9 @@ namespace BusinessLogicLayer.Services.Classes
             return ticketId;
         }
 
-        public async Task<bool> DeleteTicket(Guid ticketId)
+        public async Task<bool> DeleteTicket(DeleteTicketDTO deleteTicketDTO)
         {
-            var ticket = await _ticketRepository.GetAsync(ticketId);
+            var ticket = await _ticketRepository.GetAsync(deleteTicketDTO.Id);
             if (ticket == null)
             {
                 throw new Exception("Such ticket not exists");
@@ -210,7 +210,7 @@ namespace BusinessLogicLayer.Services.Classes
                     ticketInList.Order--;
                 }
             }
-            var isDeleted = await _ticketRepository.DeleteAsync(ticketId);
+            var isDeleted = await _ticketRepository.DeleteAsync(deleteTicketDTO.Id);
             await _ticketRepository.UpdateManyTickets(allTickets);
             return isDeleted;
         }
