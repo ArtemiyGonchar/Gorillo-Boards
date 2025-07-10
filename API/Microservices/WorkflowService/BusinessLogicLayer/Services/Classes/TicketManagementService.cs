@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.DTO.Ticket;
+using BusinessLogicLayer.DTO.TimeLog;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entites;
+using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -154,12 +156,18 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = await _ticketRepository.GetAsync(ticketCloseDTO.TicketId);
             if (ticket == null)
             {
-                throw new Exception($"Such ticket not exists: {ticketCloseDTO.TicketId}");
+                throw new Exception($"Such ticket not exists");
             }
 
             if (ticket.UserRequestor != ticketCloseDTO.UserRequestor)
             {
-                throw new Exception($"Only requestor can close this ticket: {ticket.Id}");
+                throw new Exception($"Only requestor can close this ticket");
+            }
+
+            var timeLogs = await _logRepository.GetAllInProgressLogByTicket(ticketCloseDTO.TicketId);
+            if (timeLogs.Any(l => l.EndedAt == null))
+            {
+                throw new Exception($"Work already started on this ticket");
             }
 
             ticket.IsClosed = true;

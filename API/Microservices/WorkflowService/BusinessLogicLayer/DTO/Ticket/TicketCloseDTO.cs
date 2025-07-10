@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.DTO.Ticket
 {
     public class TicketCloseDTO
     {
+        public Guid BoardId { get; set; }
         public Guid TicketId { get; set; }
         public Guid UserRequestor { get; set; }
     }
