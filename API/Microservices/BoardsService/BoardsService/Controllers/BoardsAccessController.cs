@@ -31,6 +31,14 @@ namespace PresentationLayer.Controllers
             return Ok(boards);
         }
 
+        [HttpGet("get-all-boards")]
+        public async Task<IActionResult> GetAllBoards()
+        {
+            var boards = await _boardAccessService.GetAllBoards();
+            return Ok(boards);
+        }
+
+
         [HttpGet("{boardId}/has-access")]
         public async Task<IActionResult> HasAccess(Guid boardId)
         {
