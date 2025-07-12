@@ -71,6 +71,7 @@ namespace BusinessLogicLayer.Services.Classes
             var boardId = board.Id;
 
             var boardRoleMapped = _mapper.Map<BoardRole>(boardCreateAllowedRoleDTO);
+            //var boardR = 
             boardRoleMapped.BoardId = boardId;
 
             var mappedRole = _mapper.Map<UserRoleGlobal>(boardCreateAllowedRoleDTO.AllowedRole);

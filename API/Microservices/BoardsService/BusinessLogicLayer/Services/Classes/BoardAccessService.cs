@@ -25,6 +25,12 @@ namespace BusinessLogicLayer.Services.Classes
             _boardRoleRepository = boardRoleRepository;
         }
 
+        public async Task<List<BoardResponseDTO>> GetAllBoards()
+        {
+            var boards = await _boardRepository.GetAllAsync();
+            return _mapper.Map<List<BoardResponseDTO>>(boards);
+        }
+
         public async Task<BoardResponseDTO> GetBoardById(Guid boardId)
         {
             var board = await _boardRepository.GetAsync(boardId);

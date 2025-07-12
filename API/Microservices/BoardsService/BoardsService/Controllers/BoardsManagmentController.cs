@@ -38,10 +38,10 @@ namespace BoardsService.Controllers
             return Ok(isDeleted);
         }
 
-        [HttpPost("DeleteBoard")]
-        public async Task<IActionResult> DeleteBoard([FromBody] string title)
+        [HttpPost("delete-board")]
+        public async Task<IActionResult> DeleteBoard([FromBody] DeleteBoardDTO dto)
         {
-            var isDeleted = await _boardsManagmentService.DeleteBoardAsync(title);
+            var isDeleted = await _boardsManagmentService.DeleteBoardAsync(dto.Title);
             return Ok(isDeleted);
         }
     }

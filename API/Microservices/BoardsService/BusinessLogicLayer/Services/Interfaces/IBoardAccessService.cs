@@ -12,5 +12,6 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<List<BoardResponseDTO>> GetBoards(string role);
         Task<bool> HasAccess(Guid boardId, string role);
         Task<BoardResponseDTO> GetBoardById(Guid boardId);
+        Task<List<BoardResponseDTO>> GetAllBoards();
     }
 }
