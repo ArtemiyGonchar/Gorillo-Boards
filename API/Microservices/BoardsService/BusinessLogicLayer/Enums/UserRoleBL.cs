@@ -9,6 +9,10 @@ namespace BusinessLogicLayer.Enums
     public enum UserRoleBL
     {
         Member,
-        Admin
+        Admin,
+        Junior,
+        Middle,
+        Senior,
+        Owner
     }
 }
