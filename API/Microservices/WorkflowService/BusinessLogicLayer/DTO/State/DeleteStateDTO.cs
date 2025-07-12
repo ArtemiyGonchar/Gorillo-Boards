@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.DTO.State
 {
-    public class StateRenameDTO
+    public class DeleteStateDTO
     {
         public Guid BoardId { get; set; }
         public Guid Id { get; set; }
-        public string Title { get; set; }
     }
 }

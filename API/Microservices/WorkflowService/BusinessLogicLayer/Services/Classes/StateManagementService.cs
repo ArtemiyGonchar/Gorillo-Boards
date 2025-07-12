@@ -16,13 +16,15 @@ namespace BusinessLogicLayer.Services.Classes
     {
         private readonly IBoardsServiceClient _boardsServiceClient;
         private readonly IStateRepository _stateRepository;
+        private readonly ITicketRepository _ticketRepository;
         private readonly IMapper _mapper;
 
-        public StateManagementService(IStateRepository stateRepository, IMapper mapper, IBoardsServiceClient boardsServiceClient)
+        public StateManagementService(IStateRepository stateRepository, IMapper mapper, IBoardsServiceClient boardsServiceClient, ITicketRepository ticketRepository)
         {
             _stateRepository = stateRepository;
             _mapper = mapper;
             _boardsServiceClient = boardsServiceClient;
+            _ticketRepository = ticketRepository;
         }
 
         public async Task<bool> ChangeOrderState(StateChangeOrder stateChangeOrder)
@@ -105,6 +107,12 @@ namespace BusinessLogicLayer.Services.Classes
             if (!hasAccess)
             {
                 throw new Exception("Unuthorized");
+            }
+
+            var tickets = await _ticketRepository.GetTicketsByStateId(stateId);
+            if (tickets.Any())
+            {
+                throw new Exception("Remove tickets from state first");
             }
 
             var allStates = await _stateRepository.GetStatesByBoardId(state.BoardId);
