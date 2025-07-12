@@ -9,6 +9,10 @@ namespace DataAccessLayer.Enums
     public enum UserRoleGlobal
     {
         Member,
-        Admin
+        Admin,
+        Junior,
+        Middle,
+        Senior,
+        Owner
     }
 }

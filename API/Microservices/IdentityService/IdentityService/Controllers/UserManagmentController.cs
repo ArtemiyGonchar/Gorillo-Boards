@@ -17,19 +17,26 @@ namespace PresentationLayer.Controllers
             _userManagmentService = userManagmentService;
         }
 
-        [HttpPost("RegisterUser")]
+        [HttpPost("register-user")]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDTO userRegistrationDTO)
         {
             var userId = await _userManagmentService.RegisterUser(userRegistrationDTO);
             return Ok(userId);
         }
 
-        [HttpPost("DeleteUser")]
-        public async Task<IActionResult> DeleteUser([FromBody] string username)
+        [HttpPost("delete-user")]
+        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO dto)
         {
-            var IsDeleted = await _userManagmentService.DeleteUserByUsername(username);
+            var IsDeleted = await _userManagmentService.DeleteUserByUsername(dto.UserName);
 
             return Ok(IsDeleted);
+        }
+
+        [HttpGet("get-all-users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userManagmentService.GetAllUsers();
+            return Ok(users);
         }
     }
 }

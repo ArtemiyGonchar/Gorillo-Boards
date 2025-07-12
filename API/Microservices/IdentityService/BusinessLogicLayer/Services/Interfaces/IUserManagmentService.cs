@@ -11,5 +11,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     {
         Task<Guid> RegisterUser(UserRegistrationDTO userRegistrationDTO);
         Task<bool> DeleteUserByUsername(string username);
+        Task<List<GetUserDTO>> GetAllUsers();
     }
 }

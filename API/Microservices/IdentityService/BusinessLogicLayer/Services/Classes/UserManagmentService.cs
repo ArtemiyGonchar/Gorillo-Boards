@@ -53,6 +53,12 @@ namespace BusinessLogicLayer.Services.Classes
             return isDeleted;
         }
 
+        public async Task<List<GetUserDTO>> GetAllUsers()
+        {
+            var users = await _userRepository.GetAllAsync();
+            return _mapper.Map<List<GetUserDTO>>(users);
+        }
+
         public async Task<Guid> RegisterUser(UserRegistrationDTO userRegistrationDTO)
         {
             var userInDb = await _userRepository.GetByUsername(userRegistrationDTO.UserName) == null; //cheking if user is in db
