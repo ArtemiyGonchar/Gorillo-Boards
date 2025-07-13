@@ -13,10 +13,12 @@ namespace PresentationLayer.Controllers
     {
         private readonly IAuthService _authService;
         private readonly JwtTokenProvider _jwtTokenProvider;
-        public AuthController(IAuthService authService, JwtTokenProvider jwtTokenProvider)
+        private readonly ILogger<AuthController> _logger;
+        public AuthController(IAuthService authService, JwtTokenProvider jwtTokenProvider, ILogger<AuthController> logger)
         {
             _authService = authService;
             _jwtTokenProvider = jwtTokenProvider;
+            _logger = logger;
         }
 
         [HttpPost("login")]
@@ -27,9 +29,9 @@ namespace PresentationLayer.Controllers
             if (userJwt != null)
             {
                 var token = _jwtTokenProvider.CreateToken(userJwt.Id, userJwt.UserName, userJwt.Role.ToString());
+                _logger.LogInformation($"User logged: {userJwt.UserName}");
                 return Ok(token);
             }
-
             return Unauthorized();
         }
 

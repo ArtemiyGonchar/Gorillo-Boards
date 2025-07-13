@@ -1,10 +1,10 @@
-
 using BusinessLogicLayer;
 using DataAccessLayer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PresentationLayer.Extenstions;
+using Serilog;
 using System.Text;
 
 namespace IdentityService
@@ -56,6 +56,10 @@ namespace IdentityService
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwaggerGenWithJWT();
+
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+            );
 
 
             var app = builder.Build();
