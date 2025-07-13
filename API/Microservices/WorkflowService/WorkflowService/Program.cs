@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Extensions;
 using PresentationLayer.Hubs;
+using Serilog;
 using System.Text;
 
 namespace WorkflowService
@@ -55,6 +56,10 @@ namespace WorkflowService
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGenWithJWT();
+
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+            );
 
             var app = builder.Build();
 

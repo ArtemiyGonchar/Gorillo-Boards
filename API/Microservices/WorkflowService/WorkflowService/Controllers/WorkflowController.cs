@@ -17,6 +17,7 @@ namespace PresentationLayer.Controllers
     [Authorize]
     public class WorkflowController : ControllerBase
     {
+        private readonly ILogger<WorkflowController> _logger;
         private readonly IStateManagementService _stateManagementService;
         private readonly ITicketManagementService _ticketManagementService;
         private readonly ITimeLogService _timeLogService;
@@ -24,14 +25,14 @@ namespace PresentationLayer.Controllers
         private readonly IHubContext<WorkflowHub> _hubContext;
 
         public WorkflowController(IStateManagementService stateManagementService, ITicketManagementService ticketManagementService
-            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext, IFilteringService filteringService)
+            , ITimeLogService timeLogService, IHubContext<WorkflowHub> hubContext, IFilteringService filteringService, ILogger<WorkflowController> logger)
         {
             _stateManagementService = stateManagementService;
             _ticketManagementService = ticketManagementService;
             _timeLogService = timeLogService;
             _hubContext = hubContext;
             _filteringService = filteringService;
-
+            _logger = logger;
         }
 
         [HttpPost("create-state")]
@@ -39,13 +40,16 @@ namespace PresentationLayer.Controllers
         {
             var stateId = await _stateManagementService.CreateState(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"State created, board id:{dto.BoardId}, title: {dto.Title}");
             return Ok(stateId);
         }
 
         [HttpPost("delete-state")]
-        public async Task<IActionResult> DeleteState([FromBody] Guid stateId)
+        public async Task<IActionResult> DeleteState([FromBody] DeleteStateDTO dto)
         {
-            var deleted = await _stateManagementService.DeleteState(stateId);
+            var deleted = await _stateManagementService.DeleteState(dto.Id);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"State deleted, board id:{dto.BoardId}, state id: {dto.Id}");
             return Ok(deleted);
         }
 
@@ -54,6 +58,7 @@ namespace PresentationLayer.Controllers
         {
             var changedOrder = await _stateManagementService.ChangeOrderState(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"State changed order, board id:{dto.BoardId}, state id: {dto.StateId}, order changed to: {dto.OrderTarget}");
             return Ok(changedOrder);
         }
 
@@ -68,6 +73,8 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> RenameState([FromBody] StateRenameDTO dto)
         {
             var id = await _stateManagementService.RenameState(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"State renamed, board id:{dto.BoardId}, state id: {dto.Id}, new title: {dto.Title}");
             return Ok(id);
         }
 
@@ -78,6 +85,7 @@ namespace PresentationLayer.Controllers
             dto.UserRequestor = Guid.Parse(requestorId);
             var id = await _ticketManagementService.CreateTicket(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Ticket created, board id:{dto.BoardId}, title: {dto.Title}");
             return Ok(id);
         }
 
@@ -90,9 +98,11 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("delete-ticket")]
-        public async Task<IActionResult> DeleteTicket([FromBody] Guid ticketId)
+        public async Task<IActionResult> DeleteTicket([FromBody] DeleteTicketDTO dto)
         {
-            var deleted = await _ticketManagementService.DeleteTicket(ticketId);
+            var deleted = await _ticketManagementService.DeleteTicket(dto);
+            await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Ticket deleted, board id:{dto.BoardId}, ticket id: {dto.Id}");
             return Ok(deleted);
         }
 
@@ -101,6 +111,7 @@ namespace PresentationLayer.Controllers
         {
             var id = await _ticketManagementService.RenameTicket(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Ticket renamed, board id:{dto.BoardId}, ticket id: {dto.Id}, new title: {dto.Title}");
             return Ok(id);
         }
 
@@ -127,6 +138,7 @@ namespace PresentationLayer.Controllers
             dto.UserRequestor = Guid.Parse(requestorId);
             var id = await _ticketManagementService.CloseTicket(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Ticket closed, board id:{dto.BoardId}, ticket id: {dto.TicketId}");
             return Ok(id);
         }
 
@@ -137,6 +149,7 @@ namespace PresentationLayer.Controllers
             dto.UserId = Guid.Parse(userId);
             var timeLogId = await _timeLogService.TicketWorkStart(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Started work on ticket, board id:{dto.BoardId}, ticket id: {dto.TicketId}, user id: {dto.UserId}");
             return Ok(timeLogId);
         }
 
@@ -147,6 +160,7 @@ namespace PresentationLayer.Controllers
             dto.UserId = Guid.Parse(userId);
             var timeLogId = await _timeLogService.TicketWorkEnd(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Ended work on ticket, board id:{dto.BoardId}, ticket id: {dto.TicketId}, user id: {dto.UserId}");
             return Ok(timeLogId);
         }
 

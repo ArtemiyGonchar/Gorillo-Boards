@@ -12,13 +12,15 @@ namespace PresentationLayer.Controllers
     [Authorize]
     public class FilteringController : ControllerBase
     {
+        private readonly ILogger<FilteringController> _logger;
         private readonly IFilteringService _filteringService;
         private readonly IHubContext<WorkflowHub> _hubContext;
 
-        public FilteringController(IFilteringService filteringService, IHubContext<WorkflowHub> hubContext)
+        public FilteringController(IFilteringService filteringService, IHubContext<WorkflowHub> hubContext, ILogger<FilteringController> logger)
         {
             _filteringService = filteringService;
             _hubContext = hubContext;
+            _logger = logger;
         }
 
         [HttpPost("create-label")]
@@ -26,6 +28,7 @@ namespace PresentationLayer.Controllers
         {
             var labelId = await _filteringService.CreateLabel(dto);
             //await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Label created, board id:{dto.BoardId}, title: {dto.Title}");
             return Ok(labelId);
         }
 
@@ -34,6 +37,7 @@ namespace PresentationLayer.Controllers
         {
             var deleted = await _filteringService.DeleteLabelById(dto);
             await _hubContext.Clients.Group(dto.BoardId.ToString()).SendAsync("WorkflowUpdated", dto.BoardId);
+            _logger.LogInformation($"Label deleted, board id:{dto.BoardId}, label id: {dto.Id}");
             return Ok(deleted);
         }
 

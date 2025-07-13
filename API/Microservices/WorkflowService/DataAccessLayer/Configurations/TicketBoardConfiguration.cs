@@ -14,7 +14,7 @@ namespace DataAccessLayer.Configurations
         public void Configure(EntityTypeBuilder<TicketBoard> builder)
         {
             builder.Property(x => x.Title)
-                .HasMaxLength(30)
+                .HasMaxLength(100)
                 .IsRequired();
 
             builder.HasIndex(x => x.Title).IsUnique();
