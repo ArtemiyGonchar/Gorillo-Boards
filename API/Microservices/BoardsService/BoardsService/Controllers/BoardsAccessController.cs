@@ -11,11 +11,13 @@ namespace PresentationLayer.Controllers
     [Authorize]
     public class BoardsAccessController : ControllerBase
     {
+        private readonly ILogger<BoardsAccessController> _logger;
         private readonly IBoardAccessService _boardAccessService;
 
-        public BoardsAccessController(IBoardAccessService boardAccessService)
+        public BoardsAccessController(IBoardAccessService boardAccessService, ILogger<BoardsAccessController> logger)
         {
             _boardAccessService = boardAccessService;
+            _logger = logger;
         }
 
         [HttpGet("GetBoards")]

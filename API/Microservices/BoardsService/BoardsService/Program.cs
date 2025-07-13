@@ -2,6 +2,7 @@ using BusinessLogicLayer.Extensions;
 using DataAccessLayer;
 using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Extensions;
+using Serilog;
 using System.Text;
 namespace BoardsService
 {
@@ -51,6 +52,9 @@ namespace BoardsService
                     });
             });
 
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+            );
 
             var app = builder.Build();
 
