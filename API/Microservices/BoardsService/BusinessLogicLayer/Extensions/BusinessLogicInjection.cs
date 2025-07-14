@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
+using DataAccessLayer;
 using GorilloBoards.Contracts.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,7 @@ namespace BusinessLogicLayer.Extensions
                 return client.CreateSender(configuration["ServiceBus:Topic"]);
             });
 
-
+            services.AddDataAccessLayer(configuration);
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<IBoardsManagmentService, BoardsManagmentService>();
             services.AddScoped<IBoardAccessService, BoardAccessService>();
