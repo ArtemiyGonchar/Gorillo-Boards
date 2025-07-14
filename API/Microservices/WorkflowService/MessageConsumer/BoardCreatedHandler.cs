@@ -20,7 +20,7 @@ namespace MessageConsumer
         }
 
         [Function(nameof(BoardCreatedHandler))]
-        public async Task Run([ServiceBusTrigger("identity-events", "boardcreated-subscription", Connection = "AzureConnection")] ServiceBusReceivedMessage message)
+        public async Task Run([ServiceBusTrigger("workflow", "boardcreated-subscription", Connection = "AzureConnection")] ServiceBusReceivedMessage message)
         {
             _logger.LogInformation("Message ID: {id}", message.MessageId);
             _logger.LogInformation("Message Body: {body}", message.Body);

@@ -19,7 +19,7 @@ namespace MessageConsumer
         }
 
         [Function(nameof(BoardDeletedHandler))]
-        public async Task RunAsync([ServiceBusTrigger("identity-events", "boarddeleted-subscription", Connection = "AzureConnection")] ServiceBusReceivedMessage message)
+        public async Task RunAsync([ServiceBusTrigger("workflow", "boarddeleted-subscription", Connection = "AzureConnection")] ServiceBusReceivedMessage message)
         {
             _logger.LogInformation("Message ID: {id}", message.MessageId);
             _logger.LogInformation("Message Body: {body}", message.Body);

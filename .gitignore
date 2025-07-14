@@ -52,3 +52,5 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+/API/Microservices/ChartsService/ChartsService/appsettings.json
+/API/Microservices/ChartsService/ChartsService/appsettings.Development.json
