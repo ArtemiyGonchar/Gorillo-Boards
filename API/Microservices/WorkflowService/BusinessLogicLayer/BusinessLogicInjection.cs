@@ -1,8 +1,10 @@
-﻿using BusinessLogicLayer.ApiClients;
+﻿using Azure.Messaging.ServiceBus;
+using BusinessLogicLayer.ApiClients;
 using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
+using GorilloBoards.Contracts.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,19 @@ namespace BusinessLogicLayer
     {
         public static void AddBLLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration["ServiceBus:ConnectionString"];
+            var topic = configuration["ServiceBus:Topic"];
+
+            if (!(string.IsNullOrEmpty(connectionString)))
+            {
+                services.AddSingleton(new ServiceBusClient(connectionString));
+                services.AddSingleton<ServiceBusSender>(sp =>
+                {
+                    var client = sp.GetRequiredService<ServiceBusClient>();
+                    return client.CreateSender(topic);
+                });
+            }
+
             services.AddDataAccessLayer(configuration);
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<IBoardManagementService, BoardManagementService>();
@@ -26,6 +41,7 @@ namespace BusinessLogicLayer
             services.AddScoped<IFilteringService, FilteringService>();
             services.AddScoped<ITimeLogService, TimeLogService>();
             services.AddScoped<AuthHeaderHandler>();
+            services.AddScoped<IEventPublisher, AzureBusEventPublisherService>();
         }
     }
 }

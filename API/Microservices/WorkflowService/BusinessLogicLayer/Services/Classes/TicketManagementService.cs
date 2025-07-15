@@ -5,6 +5,8 @@ using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entites;
 using DataAccessLayer.Repositories;
 using DataAccessLayer.Repositories.Interfaces;
+using GorilloBoards.Contracts.IntegrationEvents;
+using GorilloBoards.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +21,15 @@ namespace BusinessLogicLayer.Services.Classes
         private readonly ITicketRepository _ticketRepository;
         private readonly ITimeLogRepository _logRepository;
         private readonly IMapper _mapper;
+        private readonly IEventPublisher _eventPublisher;
 
-        public TicketManagementService(ITicketRepository ticketRepository, IMapper mapper, IStateRepository stateRepository, ITimeLogRepository timeLogRepository)
+        public TicketManagementService(ITicketRepository ticketRepository, IMapper mapper, IStateRepository stateRepository, ITimeLogRepository timeLogRepository, IEventPublisher eventPublisher)
         {
             _ticketRepository = ticketRepository;
             _mapper = mapper;
             _stateRepository = stateRepository;
             _logRepository = timeLogRepository;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<TicketUserAssignedDTO> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO)
@@ -188,6 +192,15 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = _mapper.Map<Ticket>(ticketCreateDTO);
 
             var ticketId = await _ticketRepository.CreateTicketWithOder(ticket);
+
+            var ticketCreatedEvent = new TicketCreatedEvent
+            {
+                Id = ticketId,
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            await _eventPublisher.Publish(ticketCreatedEvent);
+
             return ticketId;
         }
 
