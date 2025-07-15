@@ -224,6 +224,13 @@ namespace BusinessLogicLayer.Services.Classes
                 }
             }
             var isDeleted = await _ticketRepository.DeleteAsync(deleteTicketDTO.Id);
+
+            var ticketDeletedEvent = new TicketDeletedEvent
+            {
+                Id = ticket.Id
+            };
+            await _eventPublisher.Publish(ticketDeletedEvent);
+
             await _ticketRepository.UpdateManyTickets(allTickets);
             return isDeleted;
         }
