@@ -177,6 +177,15 @@ namespace BusinessLogicLayer.Services.Classes
             ticket.IsClosed = true;
             ticket.TicketClosed = DateTime.UtcNow;
             var ticketId = await _ticketRepository.UpdateAsync(ticket);
+
+            var ticketClosedEvent = new TicketClosedEvent
+            {
+                Id = ticketId,
+                TicketClosed = (DateTime)ticket.TicketClosed
+            };
+
+            await _eventPublisher.Publish(ticketClosedEvent);
+
             return ticketId;
         }
 
