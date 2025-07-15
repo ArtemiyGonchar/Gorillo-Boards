@@ -21,6 +21,7 @@ namespace DataAccessLayer
                 options.UseSqlServer(configuration.GetConnectionString("DbConnectionString"));
             });
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ITicketRepository, TicketRepository>();
         }
     }
 }

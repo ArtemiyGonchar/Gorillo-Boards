@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BusinessLogicLayer.DTO.Ticket.Request;
+using DataAccessLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace BusinessLogicLayer.Mapping
     {
         public AutomapperBLLProfile()
         {
-
+            CreateMap<Ticket, TicketCreateDTO>().ReverseMap();
         }
     }
 }

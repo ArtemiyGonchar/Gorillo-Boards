@@ -1,4 +1,6 @@
 ﻿using BusinessLogicLayer.Mapping;
+using BusinessLogicLayer.Services.Classes;
+using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ namespace BusinessLogicLayer
         {
             services.AddDataAccessLayer(configuration);
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
+            services.AddScoped<ITicketProcessorService, TicketProcessorService>();
         }
     }
 }

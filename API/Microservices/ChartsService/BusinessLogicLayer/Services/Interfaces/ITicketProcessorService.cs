@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLogicLayer.DTO.Ticket.Request;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services.Interfaces
 {
-    internal interface ITicketProcessorService
+    public interface ITicketProcessorService
     {
+        Task<Guid> CreateTicket(TicketCreateDTO ticketCreateDTO);
     }
 }

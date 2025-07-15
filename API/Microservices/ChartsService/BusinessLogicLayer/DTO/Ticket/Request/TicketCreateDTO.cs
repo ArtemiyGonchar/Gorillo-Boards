@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Entities
+namespace BusinessLogicLayer.DTO.Ticket.Request
 {
-    public class Ticket : BaseEntity
+    public class TicketCreateDTO
     {
+        public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? TicketClose { get; set; }
     }
 }

@@ -14,7 +14,6 @@ namespace DataAccessLayer.Configurations
         public void Configure(EntityTypeBuilder<Ticket> builder)
         {
             builder.Property(x => x.CreatedAt).IsRequired();
-            builder.Property(x => x.TicketId).IsRequired();
         }
     }
 }
