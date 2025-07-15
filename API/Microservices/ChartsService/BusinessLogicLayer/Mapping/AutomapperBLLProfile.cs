@@ -14,6 +14,8 @@ namespace BusinessLogicLayer.Mapping
         public AutomapperBLLProfile()
         {
             CreateMap<Ticket, TicketCreateDTO>().ReverseMap();
+            CreateMap<Ticket, TicketCloseDTO>().ForMember(dest => dest.TicketClosed, opt => opt.MapFrom(src => src.TicketClose))
+                .ReverseMap();
         }
     }
 }

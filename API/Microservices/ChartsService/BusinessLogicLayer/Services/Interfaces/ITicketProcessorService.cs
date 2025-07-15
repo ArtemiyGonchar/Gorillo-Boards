@@ -11,5 +11,6 @@ namespace BusinessLogicLayer.Services.Interfaces
     {
         Task<Guid> CreateTicket(TicketCreateDTO ticketCreateDTO);
         Task<bool> DeleteTicket(TicketDeleteDTO ticketDeleteDTO);
+        Task<Guid> CloseTicket(TicketCloseDTO ticketCloseDTO);
     }
 }

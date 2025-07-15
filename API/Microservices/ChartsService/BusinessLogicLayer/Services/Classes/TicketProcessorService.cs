@@ -21,6 +21,20 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
         }
 
+        public async Task<Guid> CloseTicket(TicketCloseDTO ticketCloseDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(ticketCloseDTO.Id);
+
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            ticket.TicketClose = ticketCloseDTO.TicketClosed;
+            var ticketId = await _ticketRepository.UpdateAsync(ticket);
+            return ticketId;
+        }
+
         public async Task<Guid> CreateTicket(TicketCreateDTO ticketCreateDTO)
         {
             var ticket = _mapper.Map<Ticket>(ticketCreateDTO);
