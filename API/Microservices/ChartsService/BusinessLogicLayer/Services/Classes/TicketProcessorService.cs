@@ -27,5 +27,11 @@ namespace BusinessLogicLayer.Services.Classes
             var ticketId = await _ticketRepository.CreateAsync(ticket);
             return ticketId;
         }
+
+        public async Task<bool> DeleteTicket(TicketDeleteDTO ticketDeleteDTO)
+        {
+            var isDeleted = await _ticketRepository.DeleteAsync(ticketDeleteDTO.Id);
+            return isDeleted;
+        }
     }
 }
