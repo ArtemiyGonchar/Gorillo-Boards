@@ -163,11 +163,6 @@ namespace BusinessLogicLayer.Services.Classes
                 throw new Exception($"Such ticket not exists");
             }
 
-            if (ticket.UserRequestor != ticketCloseDTO.UserRequestor)
-            {
-                throw new Exception($"Only requestor can close this ticket");
-            }
-
             var timeLogs = await _logRepository.GetAllInProgressLogByTicket(ticketCloseDTO.TicketId);
             if (timeLogs.Any(l => l.EndedAt == null))
             {
