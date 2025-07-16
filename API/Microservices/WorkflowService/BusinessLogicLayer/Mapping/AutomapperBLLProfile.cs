@@ -3,7 +3,8 @@ using BusinessLogicLayer.DTO.Board;
 using BusinessLogicLayer.DTO.Label;
 using BusinessLogicLayer.DTO.State;
 using BusinessLogicLayer.DTO.Ticket;
-using BusinessLogicLayer.DTO.TimeLog;
+using BusinessLogicLayer.DTO.TimeLog.Request;
+using BusinessLogicLayer.DTO.TimeLog.Response;
 using DataAccessLayer.Entites;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace BusinessLogicLayer.Mapping
 
             CreateMap<TicketTimeLog, TicketStartWorkDTO>().ReverseMap();
             CreateMap<TicketTimeLog, TimeLogListDTO>().ReverseMap();
+            CreateMap<TicketTimeLog, TimeLogToTicketDTO>().ReverseMap();
         }
     }
 }

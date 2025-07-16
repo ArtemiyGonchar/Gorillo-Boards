@@ -1,4 +1,5 @@
-﻿using BusinessLogicLayer.DTO.TimeLog;
+﻿using BusinessLogicLayer.DTO.TimeLog.Request;
+using BusinessLogicLayer.DTO.TimeLog.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<Guid> TicketWorkEnd(TicketEndWorkDTO ticketEndWorkDTO);
         Task<bool> TicketInProgress(TicketInProgressDTO ticketInProgressDTO);
         Task<List<TimeLogListDTO>> GetTimeLogsByTicket(GetTimeLogsByTicketDTO getTimeLogsByTicketDTO);
+        Task AddTimeLogToTicket(TimeLogToTicketDTO timeLogToTicketDTO);
     }
 }

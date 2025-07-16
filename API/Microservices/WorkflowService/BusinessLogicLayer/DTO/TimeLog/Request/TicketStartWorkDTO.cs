@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.DTO.TimeLog
+namespace BusinessLogicLayer.DTO.TimeLog.Request
 {
-    public class TicketEndWorkDTO
+    public class TicketStartWorkDTO
     {
         public Guid BoardId { get; set; }
         public Guid TicketId { get; set; }

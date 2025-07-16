@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using BusinessLogicLayer.DTO.TimeLog;
+using BusinessLogicLayer.DTO.TimeLog.Request;
+using BusinessLogicLayer.DTO.TimeLog.Response;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entites;
 using DataAccessLayer.Repositories.Interfaces;
@@ -22,6 +23,19 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
             _timeLogRepository = timeLogRepository;
             _ticketRepository = ticketRepository;
+        }
+
+        public async Task AddTimeLogToTicket(TimeLogToTicketDTO timeLogToTicketDTO)
+        {
+            var ticket = await _ticketRepository.GetAsync(timeLogToTicketDTO.TicketId);
+
+            if (ticket == null)
+            {
+                throw new Exception("Such ticket not exists");
+            }
+
+            var timelogMapped = _mapper.Map<TicketTimeLog>(timeLogToTicketDTO);
+            await _timeLogRepository.CreateAsync(timelogMapped);
         }
 
         public async Task<List<TimeLogListDTO>> GetTimeLogsByTicket(GetTimeLogsByTicketDTO getTimeLogsByTicketDTO)

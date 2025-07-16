@@ -1,7 +1,7 @@
 ﻿using BusinessLogicLayer.DTO.Label;
 using BusinessLogicLayer.DTO.State;
 using BusinessLogicLayer.DTO.Ticket;
-using BusinessLogicLayer.DTO.TimeLog;
+using BusinessLogicLayer.DTO.TimeLog.Request;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -203,6 +203,15 @@ namespace PresentationLayer.Controllers
         {
             var timeLogs = await _timeLogService.GetTimeLogsByTicket(dto);
             return Ok(timeLogs);
+        }
+
+        [HttpPost("add-timelog-to-ticket")]
+        public async Task<IActionResult> AddTimelogToTicket([FromBody] TimeLogToTicketDTO dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            dto.UserId = Guid.Parse(userId);
+            await _timeLogService.AddTimeLogToTicket(dto);
+            return Ok();
         }
     }
 }
