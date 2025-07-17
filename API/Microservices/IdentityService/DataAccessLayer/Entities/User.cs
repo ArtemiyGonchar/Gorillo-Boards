@@ -15,6 +15,6 @@ namespace DataAccessLayer.Entities
         public string PasswordHash { get; set; }
         //public string Salt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public UserRoleGlobal Role { get; set; } = UserRoleGlobal.Member;
+        public UserRoleGlobal Role { get; set; } = UserRoleGlobal.Contributor;
     }
 }

@@ -3,6 +3,7 @@ using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using BusinessLogicLayer.Services.Security;
+using DataAccessLayer;
 using GorilloBoards.Contracts.Interfaces;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,7 @@ namespace BusinessLogicLayer
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserManagmentService, UserManagmentService>();
             services.AddScoped<IEventPublisher, AzureBusEventPublisherService>();
+            services.AddDataAccesLayer(configuration);
         }
     }
 }

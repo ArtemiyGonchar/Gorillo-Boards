@@ -20,7 +20,7 @@ namespace IdentityService
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddBLLayer(builder.Configuration);
-            builder.Services.AddDataAccesLayer(builder.Configuration);
+            //builder.Services.AddDataAccesLayer(builder.Configuration);
             builder.Services.AddJwtTokenProvider();
 
             builder.Services.AddCors(options =>
@@ -28,7 +28,7 @@ namespace IdentityService
                 options.AddPolicy("AllowReact",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173")
+                        policy.WithOrigins(builder.Configuration["Cors"])
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
