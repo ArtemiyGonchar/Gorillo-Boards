@@ -16,5 +16,7 @@ namespace DataAccessLayer.Repositories.Interfaces
         Task<List<Ticket>> GetTicketsByLabel(Guid labelId);
 
         Task<List<Ticket>> GetTicketByState(Guid stateId);
+        Task<List<Ticket>?> GetClosedTickets();
+        Task<bool> DeleteClosedTickets();
     }
 }

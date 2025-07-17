@@ -196,16 +196,21 @@ namespace BusinessLogicLayer.Services.Classes
             var ticket = _mapper.Map<Ticket>(ticketCreateDTO);
 
             var ticketId = await _ticketRepository.CreateTicketWithOder(ticket);
-
+            var getTicket = await _ticketRepository.GetAsync(ticketId);
             var ticketCreatedEvent = new TicketCreatedEvent
             {
                 Id = ticketId,
                 CreatedAt = DateTime.UtcNow,
+                BoardId = getTicket.State.BoardId
             };
 
             await _eventPublisher.Publish(ticketCreatedEvent);
-
             return ticketId;
+        }
+
+        public async Task<bool> DeleteClosedTickets()
+        {
+            return await _ticketRepository.DeleteClosedTickets();
         }
 
         public async Task<bool> DeleteTicket(DeleteTicketDTO deleteTicketDTO)
@@ -237,6 +242,17 @@ namespace BusinessLogicLayer.Services.Classes
 
             await _ticketRepository.UpdateManyTickets(allTickets);
             return isDeleted;
+        }
+
+        public async Task<List<TicketListDTO>?> GetClosedTickets()
+        {
+            var closedTickets = await _ticketRepository.GetClosedTickets();
+            if (closedTickets == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<List<TicketListDTO>>(closedTickets);
         }
 
         public async Task<List<TicketListDTO>> GetTicketsByState(TicketGetByState ticketGetByState)

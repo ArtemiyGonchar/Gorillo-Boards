@@ -32,6 +32,24 @@ namespace DataAccessLayer.Repositories
             return ticket.Id;
         }
 
+        public async Task<bool> DeleteClosedTickets()
+        {
+            var toDelete = await _ctx.Set<Ticket>().Where(t => t.TicketClosed != null).ToListAsync();
+            if (toDelete == null)
+            {
+                return false;
+            }
+
+            _ctx.Set<Ticket>().RemoveRange(toDelete);
+            await _ctx.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<Ticket>?> GetClosedTickets()
+        {
+            return await _ctx.Set<Ticket>().Where(t => t.IsClosed).ToListAsync();
+        }
+
         public async Task<int> GetMaxOrderCount(Guid stateId)
         {
             var order = await _ctx.Set<Ticket>()

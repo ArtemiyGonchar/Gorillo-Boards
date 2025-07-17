@@ -1,6 +1,5 @@
 
 using BusinessLogicLayer;
-using DataAccessLayer;
 using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Extensions;
 using PresentationLayer.Hubs;
@@ -21,8 +20,10 @@ namespace WorkflowService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddBLLayer(builder.Configuration);
             //builder.Services.AddDataAccessLayer(builder.Configuration);
+
             builder.Services.AddHttpContextAccessor(); //&&&
             builder.Services.AddRefitClients(builder.Configuration);
+
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
             {
@@ -44,7 +45,7 @@ namespace WorkflowService
                 options.AddPolicy("AllowReact",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173")
+                        policy.WithOrigins(builder.Configuration["Cors"])
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();

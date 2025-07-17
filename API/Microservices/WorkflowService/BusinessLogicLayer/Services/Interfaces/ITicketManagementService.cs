@@ -19,5 +19,7 @@ namespace BusinessLogicLayer.Services.Interfaces
         Task<TicketUserAssignedDTO> AssignUserToTicket(TicketAssigneUserDTO ticketAssigneUserDTO);
 
         Task<List<TicketListDTO>> GetTicketsByState(TicketGetByState ticketGetByState);
+        Task<List<TicketListDTO>?> GetClosedTickets();
+        Task<bool> DeleteClosedTickets();
     }
 }
