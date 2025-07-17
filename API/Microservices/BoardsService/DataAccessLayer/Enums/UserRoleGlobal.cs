@@ -8,11 +8,11 @@ namespace DataAccessLayer.Enums
 {
     public enum UserRoleGlobal
     {
-        Member,
+        Contributor,
         Admin,
-        Junior,
-        Middle,
-        Senior,
-        Owner
+        DevTeam,
+        QaTeam,
+        DesignTeam,
+        Executive
     }
 }

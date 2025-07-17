@@ -8,11 +8,11 @@ namespace BusinessLogicLayer.Enums
 {
     public enum UserRoleBL
     {
-        Member,
+        Contributor,
         Admin,
-        Junior,
-        Middle,
-        Senior,
-        Owner
+        DevTeam,
+        QaTeam,
+        DesignTeam,
+        Executive
     }
 }

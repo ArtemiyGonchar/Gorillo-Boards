@@ -45,7 +45,7 @@ namespace BoardsService
                 options.AddPolicy("AllowReact",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173")
+                        policy.WithOrigins(builder.Configuration["Cors"])
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
