@@ -1,4 +1,16 @@
 
+/*.dialog {*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    height: 100vh;*/
+/*    width: 600px;*/
+/*    overflow-y: auto;*/
+/*    background: #f7f7f7;*/
+/*    z-index: 1001;*/
+/*    box-shadow: -2px 0 7px rgba(0,0,0,0.2);*/
+/*}*/
+
 .dialog {
     position: fixed;
     top: 0;
@@ -6,7 +18,7 @@
     height: 100vh;
     width: 600px;
     overflow-y: auto;
-    background: #f7f7f7;
+    background: #2c2c2c;
     z-index: 1001;
     box-shadow: -2px 0 7px rgba(0,0,0,0.2);
 }
@@ -16,8 +28,12 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
+    /*background: #fff;*/
+    /*border-bottom: 1px solid #ddd;*/
+    background: #333;
+    border-bottom: 1px solid #444;
+    color: #f0f0f0;
+
 }
 
 .dialog-header input{
@@ -26,11 +42,15 @@
     max-width: 300px;
     padding: 6px 8px;
     margin-right: 8px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 3px;
     box-sizing: border-box;
-    background: #f7f7f7;
+    /*background: #f7f7f7;*/
     font-size: 18px;
+    background: #444;
+    border: 1px solid #555;
+    color: #f0f0f0;
+
 }
 
 .dialog-header-title{
@@ -44,7 +64,8 @@
     text-overflow: ellipsis;
     word-wrap: break-word;
     font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
-    color: #4d4d4d;
+    /*color: #4d4d4d;*/
+    color: #f0f0f0;
 }
 
 .dialog-header-title-save{
@@ -68,9 +89,11 @@
 }
 
 .dialog-close{
-    background-color: #a0a0a0;
+    background-color: #555;
+    color: #fff;
+
     border: none;
-    color: white;
+    /*color: white;*/
     font-size: 16px;
     padding: 10px;
     cursor: pointer;
@@ -83,49 +106,60 @@
 
 
 .dialog-user-container {
+    box-shadow: -2px 0 7px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 16px;
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     margin: 16px;
 }
 
 .dialog-user {
     font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
-    color: #4d4d4d;
+    /*color: #4d4d4d;*/
     font-size: 18px;
     user-select: none;
     cursor: pointer;
     padding: 8px 12px;
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
     border-radius: 3px;
     transition: background-color 0.2s;
     justify-content: space-between;
+    background-color: #444;
+    color: #f0f0f0;
+
 }
 
 .dialog-user:hover {
-    background-color: #e6e6e6;
+    background-color: #6a6a6a;
 }
 
 .dialog-timeflow {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 10px;
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f5f7fa;
-    border-radius: 10px;
-    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+    margin: 16px;
+    padding: 16px;
+    /*background-color: #fff;*/
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+
+    border-radius: 4px;
+    box-shadow: -2px 0 7px rgba(0,0,0,0.2);
+
 }
 
 .dialog-timeflow-button {
     flex: 1;
     text-align: center;
     padding: 12px 0;
-    background-color: #1976d2;
+    /*background-color: #1976d2;*/
+    background-color: #555;
     font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
     color: #ffffff;
     font-size: 18px;
@@ -136,23 +170,28 @@
 }
 
 .dialog-timeflow-button:hover {
-    background-color: #145ea8;
+    /*background-color: #145ea8;*/
+    background-color: #666;
 }
 
 
 .dialog-description {
     font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 18px;
-    margin-top: 16px;
-    padding: 12px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    margin: 16px;
+    padding: 16px;
+    /*background-color: #ffffff;*/
+    /*border: 1px solid #ddd;*/
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+
+    border-radius: 4px;
     cursor: pointer;
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    color: #333;
+    color: #f0f0f0;
+    box-shadow: -2px 0 7px rgba(0,0,0,0.2);
 }
 
 .dialog-description p {
@@ -162,12 +201,329 @@
     width: 100%;
     height: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 6px;
-    resize: vertical; /* можно растягивать только по вертикали */
+    resize: vertical;
     font-size: 18px;
     font-family: inherit;
     box-sizing: border-box;
+    /*background-color: #fff;*/
+    background-color: #4a4a4a;
+    border: 1px solid #444;
+
+    /*color: #333;*/
+    color: #f0f0f0;
+}
+
+.dialog-labels {
+    margin: 16px;
+    padding: 16px;
+    box-shadow: -2px 0 7px rgba(0,0,0,0.2);
+    /*border: 1px solid #ccc;*/
+    border-radius: 4px;
+    /*background-color: #ffffff;*/
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+
+}
+
+.dialog-label-h{
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    user-select: none;
+    font-weight: 500;
+    /*color: #333;*/
+    padding: 6px 10px;
+    /*border: 1px solid #ddd;*/
+    border-radius: 6px;
+    /*background-color: #f7f7f7;*/
+    background-color: #4a4a4a;
+    border: 1px solid #444;
+    color: #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+.dialog-label {
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+    color: #fff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(0, 123, 255, 0.9);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+
+.dialog-label:hover {
+    background-color: rgba(0, 100, 210, 0.9);
+    border: none;
+}
+
+.dialog-label-title {
+    font-weight: 600;
+}
+
+.dialog-label-edit {
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.dialog-label-edit:hover {
+    color: #0056b3;
+}
+
+.dialog-label-add,
+.dialog-label-delete {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.dialog-label-add input,
+.dialog-label-delete select {
+    flex: 1;
+    max-width: 200px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.dialog-label-add button,
+.dialog-label-delete button {
+    padding: 6px 12px;
+    /*background-color: #4CAF50;*/
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.dialog-label-add button:hover,
+.dialog-label-delete button:hover {
+    /*background-color: #45a049;*/
+    background-color: #666;
+}
+
+.dialog-label-cancel {
+    margin-top: 10px;
+    padding: 6px 12px;
+    /*background-color: #B96229;*/
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.dialog-label-cancel:hover {
+    /*background-color: #a15625;*/
+    background-color: #777;
+}
+
+select {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
     background-color: #fff;
+    font-size: 14px;
+}
+
+.dialog-timelogs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /*border: 1px solid #ddd;*/
+    border-radius: 8px;
+    /*background-color: #f9f9f9;*/
+    background-color: #3a3a3a;
+    border: 1px solid #444;
+
+    margin: 16px;
+    padding: 16px;
+}
+
+.dialog-timelog {
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    /*background-color: #fff;*/
+    background-color: #444;
+    color: #f0f0f0;
+
+    box-shadow: -2px 0 7px rgba(0,0,0,0.1);
+}
+
+.dialog-timelog p {
+    margin: 0 0 8px 0;
+    font-weight: bold;
+    color: #f0f0f0;
+}
+
+.dialog-timelog-time {
+    font-size: 14px;
+    margin: 4px 0;
+    color: #f0f0f0;
+}
+
+.dialog-timelog-user {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #f0f0f0;
+}
+
+/*.dialog-timelog-in-work {*/
+/*    border-left: 4px solid #28a745;*/
+/*    padding-left: 10px;*/
+/*    background-color: #e6f5ea;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+/*.dialog-timelog-in-work p {*/
+/*    margin: 0 0 6px 0;*/
+/*    font-weight: bold;*/
+/*    color: #28a745;*/
+/*}*/
+.dialog-timelog-in-work {
+    border-left: 4px solid #666;
+    padding-left: 10px;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+}
+
+.dialog-timelog-in-work p {
+    margin: 0 0 6px 0;
+    font-weight: bold;
+    color: #aaa;
+}
+
+
+.dialog-close-ticket{
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    /*background-color: #1976d2;*/
+    background-color: #555;
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: #ffffff;
+    font-size: 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.dialog-close-ticket:hover {
+    background-color: #666;
+}
+
+.dialog-confirm {
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    border: 2px solid #ff4d4f;
+    background-color: #fff5f5;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+.dialog-confirm p {
+    margin: 0 0 12px 0;
+    font-weight: 500;
+    color: #d32f2f;
+}
+
+.dialog-confirm button {
+    margin: 0 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dialog-confirm button:first-of-type {
+    background-color: #ff4d4f;
+    color: white;
+}
+
+.dialog-confirm button:first-of-type:hover {
+    background-color: #d32f2f;
+}
+
+.dialog-confirm button:last-of-type {
+    background-color: #f0f0f0;
     color: #333;
 }
+
+.dialog-confirm button:last-of-type:hover {
+    background-color: #d9d9d9;
+}
+
+.dialog-delete-ticket {
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.dialog-delete-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 16px;
+    padding: 16px;
+}
+
+.timelog-add{
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+    color: #fff;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #2980b9;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+.dialog-date {
+    width: 180px;
+    padding: 8px 12px;
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    border-radius: 6px;
+    color: #f0f0f0;
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dialog-date:hover {
+    border-color: #777;
+    background-color: #444;
+}
+

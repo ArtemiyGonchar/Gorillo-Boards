@@ -16,7 +16,6 @@ export default function useAuth(){
             setLoading(false);
             return;
         }
-        console.log(token)
         isAuthorized().then(() => {
             setIsAuth(true);
             setLoading(false);

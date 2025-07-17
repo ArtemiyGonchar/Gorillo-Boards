@@ -5,18 +5,26 @@ import {Navigate, useNavigate} from "react-router-dom";
 import {Header} from "../Header/Header.jsx";
 import useGetUser from "../../hooks/getUser.jsx";
 import './BoardList.css';
+import {user_is_admin} from "../../api/identityApi.js";
+import BoardDialog from "./BoardDialog.jsx";
 
 
 export default function BoardsList() {
     const [boards, setBoards] = useState([]);
     const {isAuth, loading} = useAuth();
     const {user, loadingUser} = useGetUser();
+    const [isAdmin, setAdmin] = useState(false);
+
+    const [isManaging, setManaging] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(()  => {
         const fetchBoards = async () => {
             const response = await get_boards();
             setBoards(response.data);
+            const adminRes = await user_is_admin();
+            setAdmin(adminRes.data);
         }
         fetchBoards();
     }, []);
@@ -34,18 +42,33 @@ export default function BoardsList() {
     }
 
     const clickOnBoard = (board) => {
-        console.log("clicking board", board);
         navigate(`/boards/${board.id}`);
     }
 
-
+    const handleManageBoards = ()=> setManaging(true);
+    const handleCloseManageBoards = () => setManaging(false);
 
     return(
         <>
             <Header username={user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]} />
             <div>
-
+                {isManaging && (
+                    <>
+                        <BoardDialog closeDialog={handleCloseManageBoards}/>
+                    </>
+                )}
+                <div>
                 <ul className='board-list'>
+                    {isAdmin ? (
+                        <>
+                            <div className='add-board' onClick={handleManageBoards}>Manage boards</div>
+                        </>
+                    ) : (
+                        <>
+                        </>
+                    )}
+
+
                     {boards.map(board =>
                         <div
                             key={board.id}
@@ -55,6 +78,7 @@ export default function BoardsList() {
                             {board.title}
                         </div>)}
                 </ul>
+                </div>
             </div>
         </>
     )

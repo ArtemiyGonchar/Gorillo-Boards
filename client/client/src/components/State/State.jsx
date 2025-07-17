@@ -1,133 +1,29 @@
-//
-// import './State.css';
-// import Ticket from '../Ticket/Ticket.jsx'
-// import {getTickets} from "../../api/workflowApi.js";
-// import {useEffect, useState} from "react";
-//
-// import {SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
-// import {CSS} from "@dnd-kit/utilities"
-// import {closestCorners, DndContext, useDroppable} from "@dnd-kit/core";
-//
-// export default function State ({board, state}) {
-//     const {attributes, listeners,
-//         setNodeRef, transform, transition} = useSortable({id: state.id});
-//
-//     const {setNodeRef} = useDroppable({
-//         id: state.id,
-//         data: {stateId: state.stateId}
-//     })
-//
-//     const style = {
-//         transition,
-//         transform: CSS.Transform.toString(transform)
-//     };
-//
-//     //console.log( "state",state);
-//     const [tickets, setTickets] = useState([]);
-//     useEffect(() => {
-//         const fetchTickets = async () => {
-//             const response = await getTickets(board.id, state.id);
-//             //console.log( "response: ",response.data);
-//             setTickets(response.data);
-//         }
-//
-//         fetchTickets();
-//     }, [board]);
-//
-//     //console.log("tickets", tickets);
-//
-//     return (
-//         <div className='state' ref={(node) => {setNodeRef(node); setSortableRef(node)} {...attributes} {...listeners} style={style} >
-//             <div className='state-header'>
-//                 <h2 className='state-header-name'>{state.title}</h2>
-//             </div>
-//             <div className='state-list'>
-//                 <div className='state-list-sort'>
-//                     <DndContext collisionDetection={closestCorners}>
-//                         <SortableContext items={tickets.map(ticket => ticket.id)} strategy={verticalListSortingStrategy}>
-//                             {tickets.map((ticket) =>
-//                                 <Ticket key={ticket.id} ticket={ticket} />
-//                             )}
-//                         </SortableContext>
-//                     </DndContext>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
-
-
-
-
-// import './State.css';
-// import Ticket from '../Ticket/Ticket.jsx'
-// import {getTickets} from "../../api/workflowApi.js";
-// import {useEffect, useState} from "react";
-//
-// import {SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
-// import {CSS} from "@dnd-kit/utilities"
-// import {closestCorners, DndContext} from "@dnd-kit/core";
-//
-// export default function State ({board, state}) {
-//     const {attributes, listeners,
-//         setNodeRef, transform, transition} = useSortable({id: state.id});
-//
-//     const style = {
-//         transition,
-//         transform: CSS.Transform.toString(transform)
-//     };
-//
-//     //console.log( "state",state);
-//     const [tickets, setTickets] = useState([]);
-//     useEffect(() => {
-//         const fetchTickets = async () => {
-//             const response = await getTickets(board.id, state.id);
-//             //console.log( "response: ",response.data);
-//             setTickets(response.data);
-//         }
-//
-//         fetchTickets();
-//     }, [board]);
-//
-//     //console.log("tickets", tickets);
-//
-//     return (
-//             <div className='state' ref={setNodeRef} {...attributes} {...listeners} style={style} >
-//                 <div className='state-header'>
-//                     <h2 className='state-header-name'>{state.title}</h2>
-//                 </div>
-//                 <div className='state-list'>
-//                     <div className='state-list-sort'>
-//                         <DndContext collisionDetection={closestCorners}>
-//                             <SortableContext items={tickets.map(ticket => ticket.id)} strategy={verticalListSortingStrategy}>
-//                                 {tickets.map((ticket) =>
-//                                     <Ticket key={ticket.id} ticket={ticket} />
-//                                 )}
-//                             </SortableContext>
-//                         </DndContext>
-//                     </div>
-//                 </div>
-//             </div>
-//   );
-// }
-
 import './State.css';
 import Ticket from '../Ticket/Ticket.jsx'
-import {getTickets} from "../../api/workflowApi.js";
+import {change_state_order, delete_state, getTickets, rename_state} from "../../api/workflowApi.js";
 import {useEffect, useState} from "react";
 import { TfiPlus } from "react-icons/tfi";
 import {rectSortingStrategy, SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities"
 import {closestCorners, DndContext, useDroppable} from "@dnd-kit/core";
+import { AiFillCaretLeft } from "react-icons/ai";
+import { AiFillCaretRight } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import {add_ticket} from "../../api/workflowApi.js";
 
-export default function State ({board, state, tickets =[], onTicketClick}) {
-    const {setNodeRef, isOver} = useDroppable({id: state.id, data: {type: 'state',stateId: state.id, accepts: ['ticket']}});
+export default function State ({board, state, tickets =[], onTicketClick, isFiltering}) {
+    const {setNodeRef, isOver} = useDroppable({id: state.id, data:
+            {type: 'state',
+                stateId: state.id,
+                accepts: ['ticket'],
+                disable: isFiltering
+            }});
 
     const [isAddingTicket, setAddingTicket] = useState(false);
     const [ticketTitle, setTicketTitle] = useState('');
 
+    const [isRenamingState, setRenamingState] = useState(false);
+    const [renamedState, setRenamedState] = useState(state.title);
     const sortedTickets = [...tickets].sort((a, b) => a.order - b.order);
 
     const handleAddClick = () => {
@@ -148,12 +44,62 @@ export default function State ({board, state, tickets =[], onTicketClick}) {
         setTicketTitle('');
     }
 
+    const handleChangeStateOrderLeft = async () => {
+        if (state.order === 0) return;
+        console.log(state.boardId, state.id, state.order - 1)
+        await change_state_order(state.boardId, state.id, state.order - 1);
+    }
+
+    const handleChangeStateOrderRight = async () => {
+        console.log(state.boardId, state.id, state.order + 1)
+        await change_state_order(state.boardId, state.id, state.order + 1);
+    }
+
+    const handleRenameState = () => setRenamingState(true);
+    const handleCancelRenameState = () => setRenamingState(false);
+    const handleSubmitRename = async () => {
+        try{
+            await rename_state(state.boardId, state.id, renamedState);
+            setRenamingState(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleDeleteState = async () => {
+        try{
+            await delete_state(state.boardId, state.id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <SortableContext id={state.id} items={sortedTickets.map(t => t.id)} strategy={rectSortingStrategy}>
         <div className='state' ref={setNodeRef} >
             <div className='state-header'>
-                <h2 className='state-header-name'>{state.title} </h2>
-                <TfiPlus className='state-header-button' onClick={handleAddClick}/>
+                {isRenamingState ? (
+                    <>
+                        <div className='state-rename'>
+                            <input value={renamedState} onChange={(e) => setRenamedState(e.target.value)}/>
+                            <button onClick={handleSubmitRename}>Save</button>
+                            <button onClick={handleCancelRenameState}>X</button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <h2 className='state-header-name' onClick={handleRenameState}>{state.title} </h2>
+                        <div>
+                            <AiOutlineClose className='state-header-button' onClick={handleDeleteState}/>
+                            <>   </>
+                            <AiFillCaretLeft className='state-header-button' onClick={handleChangeStateOrderLeft}/>
+                            <AiFillCaretRight className='state-header-button' onClick={handleChangeStateOrderRight}/>
+                            <>   </>
+                            <TfiPlus className='state-header-button' onClick={handleAddClick}/>
+                        </div>
+                    </>
+                )}
+
             </div>
 
             {isAddingTicket && (
@@ -170,7 +116,7 @@ export default function State ({board, state, tickets =[], onTicketClick}) {
 
                 <div className='state-list'>
                     {sortedTickets.map((ticket) => (
-                        <Ticket key={ticket.id} ticket={ticket} onClickTicket={() => onTicketClick(ticket)}/>
+                        <Ticket key={ticket.id} ticket={ticket} onClickTicket={() => onTicketClick(ticket)} isFiltering={isFiltering}/>
                     ))}
                 </div>
 

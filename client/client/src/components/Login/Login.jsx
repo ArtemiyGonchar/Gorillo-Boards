@@ -11,16 +11,18 @@ export default function LoginPage(){
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (username.length < 3) return;
+        if (password.length < 7) return;
         try{
             const response = await login(username, password);
             localStorage.setItem("token", response.data);
-            console.log(response.data);
             navigate("/boards");
         }catch (error) {
             console.log(error);
         }
     };
 
+    const isValid = username.length >= 3 && password.length >= 7;
 
     return (
         <>
@@ -43,7 +45,7 @@ export default function LoginPage(){
                        className="input"
                 />
 
-                <button onClick={handleLogin} className='button'>Login</button>
+                <button onClick={handleLogin} className={`button ${isValid ? 'button-valid' : ''}`} disabled={!isValid}>Login</button>
             </div>
         </>
     )

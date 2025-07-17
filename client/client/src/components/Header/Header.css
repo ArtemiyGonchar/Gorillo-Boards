@@ -1,5 +1,5 @@
 .header{
-    background-color: #2573a7;
+    background-color: #222;
     color: #fff;
     font: 14px Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
     height: 28px;
@@ -19,11 +19,11 @@
 }
 
 .link{
-    color: #fff;
+    color: #ddd;
     text-decoration: none;
 }
 .link:hover{
-    color: #dcdcdc;
+    color: #fff;
     text-decoration: none;
 }
 .link:visited{
@@ -36,7 +36,7 @@
 }
 
 .button-link{
-    background-color: #a0a0a0;
+    background-color: #555;
     border: none;
     color: white;
     font-size: 16px;
@@ -49,3 +49,10 @@
     background-color: #878787;
 }
 
+.icon{
+
+}
+
+.icon:hover{
+    color: #a0a0a0;
+}

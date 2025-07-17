@@ -1,0 +1,124 @@
+.user-dialog {
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    position: relative;
+    width: 500px;
+    height: 50vh;
+    background: #f7f7f7;
+    border-radius: 5px;
+    box-shadow: -2px 0 7px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.user-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-dialog-header-title{
+    display: inline;
+    font-size:  17px;
+    line-height:  18px;
+    margin: 0;
+    font-weight: bold;
+    min-height: 9px;
+    min-width: 30px;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: #4d4d4d;
+}
+
+.user-dialog-header span{
+    user-select: none;
+    cursor: pointer;
+}
+
+.user-dialog-buttons-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fdfdfd;
+    border-bottom: 1px solid #f1f1f1;
+}
+.user-dialog-buttons-container button{
+    user-select:  none;
+    cursor: pointer;
+    background: #fdfdfd;
+    border: 1px solid #ddd;
+    width: 300px;
+    height: 30px;
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    transition: all 0.2s;
+}
+
+.user-dialog-buttons-container button:hover{
+    background: #f1f1f1;
+}
+
+
+.user-dialog-body{
+    padding: 16px;
+    font-size: 20px;
+}
+
+.user-dialog-body input{
+    width: 200px;
+    padding: 6px 8px;
+    margin-right: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    background: #ffffff;
+    font-size: 18px;
+}
+
+.user-dialog-body select{
+    width: 200px;
+}
+
+.user-dialog-body button{
+    width: 100px;
+    height: 35px;
+    background: #fdfdfd;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    transition:  all 0.2s;
+}
+
+.user-dialog-body button:hover{
+    background: #f1f1f1;
+}
+
+.success{
+    color: green;
+}
+
+.input-center{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}

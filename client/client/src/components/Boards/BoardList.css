@@ -3,22 +3,51 @@
     gap: 20px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.add-board{
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
+    width: 200px;
+    height: 100px;
+    padding: 5px;
+    align-content:  center;
+    background: #878787;
+    transition:  background-color 0.3s;
+    color: #fff;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor:  pointer;
+}
+
+.add-board:hover {
+    background: #7e7e7e;
 }
 
 .li-boards{
+    font-family: Roboto, Poppins, "Helvetica Neue", Arial, Helvetica, sans-serif;
     text-align: left;
     width: 200px;
     height: 100px;
     padding: 5px;
 
-    background: #2980b9;
+    background: #444;
     transition:  background-color 0.3s;
     color: #fff;
     border-radius: 5px;
+
+    overflow: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
 }
 
 .li-boards:hover{
     transform: scale(1.02);
-    background-color: #878787;
+    background-color: #555;
     transition:  background-color 0.3s;
 }

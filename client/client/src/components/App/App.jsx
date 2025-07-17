@@ -6,6 +6,7 @@ import Board from "../Boards/Board.jsx";
 import State  from "../State/State.jsx";
 import {ToastContainer, toast, Slide} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Charts from "../Charts/Charts.jsx";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />}></Route>
                         <Route path="/boards" element={<Boards/>}></Route>
                         <Route path={"/boards/:boardId"} element={<Board />}></Route>
-                <Route path={"/state"} element={<State />}></Route>
+                <Route path={"/charts"} element={<Charts />}></Route>
             </Routes>
         </Router>
   );

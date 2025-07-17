@@ -2,7 +2,7 @@ import axios from 'axios';
 import {toast} from "react-toastify";
 import apiConfig from './api-config.json';
 const api = axios.create({
-    baseURL: apiConfig.identityApi,
+    baseURL: apiConfig.chartsApi,
     headers:{
         'Content-Type': 'application/json',
     },
@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-});
+})
 
 api.interceptors.response.use(
     (response) => response,
@@ -26,7 +26,6 @@ api.interceptors.response.use(
                 cleanMsg = raw.split("System.Exception: ")[1]?.split('\n')[0];
                 toast.error(cleanMsg);
             }
-
         } else {
             toast.error("Something went wrong");
         }
@@ -34,29 +33,10 @@ api.interceptors.response.use(
     }
 );
 
-export const login = async (UserName, PasswordHash) => {
-    return api.post('/auth/login',{UserName,PasswordHash});
+export const get_all_tickets_by_sprint = async (StartedAt, EndedAt) => {
+    return api.post('/charts/get-tickets-by-sprint', {StartedAt, EndedAt});
 }
 
-export const isAuthorized = async () => {
-    return api.get('/auth/isAuthorized');
-}
-
-export const get_user = async (Id) => {
-    return api.post(`/auth/get-user-by-id`,{Id});
-}
-export const user_is_admin = async () => {
-    return api.get('/auth/user-is-admin');
-}
-
-export const create_user = async (UserName, DisplayName,PasswordHash, Role) => {
-    return api.post(`/admin/usermanagment/register-user`,{UserName, DisplayName,PasswordHash, Role:Number(Role)});
-}
-
-export const get_all_users = async () => {
-    return api.get(`/admin/usermanagment/get-all-users`);
-}
-
-export const delete_user = async (UserName) => {
-    return api.post(`/admin/usermanagment/delete-user`,{UserName});
+export const get_all_tickets_by_sprint_board = async (StartedAt, EndedAt, BoardId) => {
+    return api.post('/charts/get-tickets-by-sprint-and-board', {StartedAt, EndedAt, BoardId});
 }

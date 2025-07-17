@@ -7,9 +7,9 @@
     margin: 100px auto;
     gap: 10px;
     padding:  30px;
-    background-color: #2573a7;
+    background-color: #444;
     border-radius: 5px;
-
+    box-shadow: -2px 0 7px rgba(0,0,0,0.2);
 }
 
 .input{
@@ -22,7 +22,22 @@
     outline: #404040 solid;
 }
 
+/*.button {*/
+/*    border-radius: 5px;*/
+/*    background-color: #a0a0a0;*/
+/*    border: none;*/
+/*    color: white;*/
+/*    font-size: 16px;*/
+/*    padding: 10px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*.button:hover {*/
+/*    background-color: #878787;*/
+/*}*/
 .button {
+    border-radius: 5px;
     background-color: #a0a0a0;
     border: none;
     color: white;
@@ -35,6 +50,15 @@
 .button:hover {
     background-color: #878787;
 }
+
+.button-valid {
+    background-color: #2980b9;
+}
+
+.button-valid:hover {
+    background-color: #2573a7;
+}
+
 
 .h1{
     color: white;

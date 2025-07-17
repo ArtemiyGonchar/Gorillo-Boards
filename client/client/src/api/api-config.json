@@ -1,0 +1,6 @@
+{
+  "boardsApi": "https://localhost:7239/api",
+  "chartsApi": "https://localhost:7209/api",
+  "identityApi": "https://localhost:7189/api",
+  "workflowApi": "https://localhost:7007/api"
+}

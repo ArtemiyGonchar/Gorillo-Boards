@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {toast} from "react-toastify";
+import apiConfig from './api-config.json';
 const api = axios.create({
-    baseURL: 'https://localhost:7007/api',
+    baseURL: apiConfig.workflowApi,
     headers:{
         'Content-Type': 'application/json',
     },
@@ -23,8 +24,8 @@ api.interceptors.response.use(
             let cleanMsg = raw;
             if (raw.includes("System.Exception: ")) {
                 cleanMsg = raw.split("System.Exception: ")[1]?.split('\n')[0];
+                toast.error(cleanMsg);
             }
-            toast.error(cleanMsg);
         } else {
             toast.error("Something went wrong");
         }
@@ -81,4 +82,56 @@ export const is_ticket_in_progress = async (BoardId,TicketId) => {
 
 export const change_ticket_description = async (BoardId ,Id, Description) => {
     return api.post(`boards/${BoardId}/states/change-ticket-description`, {BoardId,Id, Description});
+}
+
+export const get_labels_by_board = async (BoardId) => {
+    return api.post(`boards/${BoardId}/states/get-labels-by-board`, {BoardId});
+}
+
+export const add_label_to_ticket = async (BoardId, LabelId, TicketId) => {
+    return api.post(`boards/${BoardId}/filtering/add-label-to-ticket`, {BoardId, LabelId, TicketId});
+}
+
+export const delete_label_from_ticket = async (BoardId, TicketId) => {
+    return api.post(`boards/${BoardId}/filtering/delete-label-from-ticket`, {BoardId, TicketId});
+}
+
+export const create_label = async (BoardId, Title) => {
+    return api.post(`boards/${BoardId}/filtering/create-label`, {BoardId, Title});
+}
+
+export const get_label_by_id = async (BoardId, Id) => {
+    return api.post(`boards/${BoardId}/filtering/get-label`, {BoardId, Id});
+}
+
+export const delete_label = async (BoardId, Id) => {
+    return api.post(`boards/${BoardId}/filtering/delete-label`, {BoardId, Id});
+}
+
+export const get_timelogs_by_ticket = async (BoardId, TicketId) => {
+    return api.post(`boards/${BoardId}/states/get-timelogs-by-ticket`, {BoardId, TicketId});
+}
+
+export const close_ticket = async (BoardId, TicketId) => {
+    return api.post(`boards/${BoardId}/states/close-ticket`, {BoardId, TicketId});
+}
+
+export const delete_ticket = async (BoardId, Id) => {
+    return api.post(`boards/${BoardId}/states/delete-ticket`, {BoardId, Id});
+}
+
+export const rename_state = async (BoardId, Id, Title) => {
+    return api.post(`boards/${BoardId}/states/rename-state`, {BoardId, Id, Title});
+}
+
+export const delete_state = async (BoardId, Id) => {
+    return api.post(`boards/${BoardId}/states/delete-state`, {BoardId, Id});
+}
+
+export const create_state = async (BoardId, Title) => {
+    return api.post(`boards/${BoardId}/states/create-state`, {BoardId, Title});
+}
+
+export const add_timelog_to_ticket = async (BoardId, TicketId, StartedAt, EndedAt) => {
+    return api.post(`boards/${BoardId}/states/add-timelog-to-ticket`, {BoardId, TicketId, StartedAt, EndedAt});
 }
