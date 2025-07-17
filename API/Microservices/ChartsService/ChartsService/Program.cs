@@ -1,4 +1,5 @@
 using BusinessLogicLayer;
+using ChartsService.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -16,7 +17,7 @@ namespace ChartsService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddBLLayer(builder.Configuration);
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGenWithJWT();
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
@@ -39,7 +40,7 @@ namespace ChartsService
                 options.AddPolicy("AllowReact",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5173")
+                        policy.WithOrigins(builder.Configuration["Cors"])
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();

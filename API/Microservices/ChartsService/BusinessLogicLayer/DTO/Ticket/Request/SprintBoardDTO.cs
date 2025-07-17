@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.DTO.Ticket.Request
 {
-    public class TicketCreateDTO
+    public class SprintBoardDTO
     {
-        public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime StartedAt { get; set; }
+        public DateTime EndedAt { get; set; }
         public Guid BoardId { get; set; }
     }
 }

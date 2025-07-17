@@ -10,5 +10,6 @@ namespace DataAccessLayer.Entities
     {
         public DateTime CreatedAt { get; set; }
         public DateTime? TicketClose { get; set; }
+        public Guid BoardId { get; set; }
     }
 }

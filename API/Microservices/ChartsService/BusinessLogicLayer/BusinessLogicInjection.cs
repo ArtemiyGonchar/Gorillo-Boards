@@ -19,6 +19,7 @@ namespace BusinessLogicLayer
             services.AddDataAccessLayer(configuration);
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<ITicketProcessorService, TicketProcessorService>();
+            services.AddScoped<IChartsService, ChartsService>();
         }
     }
 }

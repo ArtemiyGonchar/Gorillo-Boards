@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.DTO.Ticket.Request
+namespace BusinessLogicLayer.DTO.Ticket.Responce
 {
-    public class TicketCreateDTO
+    public class TicketDTO
     {
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public Guid BoardId { get; set; }
+        public DateTime? TicketClose { get; set; }
     }
 }

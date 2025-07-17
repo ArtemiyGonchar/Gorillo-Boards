@@ -9,5 +9,7 @@ namespace DataAccessLayer.Repositories.Interfaces
 {
     public interface ITicketRepository : IRepository<Ticket>
     {
+        Task<List<Ticket>> GetAllByPeriod(DateTime start, DateTime end);
+        Task<List<Ticket>> GetAllByPeriodAndBoard(DateTime start, DateTime end, Guid boardId);
     }
 }
