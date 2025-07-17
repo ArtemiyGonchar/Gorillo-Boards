@@ -10,5 +10,6 @@ namespace GorilloBoards.Contracts.IntegrationEvents
     {
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Guid BoardId { get; set; }
     }
 }
