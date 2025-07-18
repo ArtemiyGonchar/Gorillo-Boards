@@ -5,6 +5,7 @@ using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.Interfaces;
 using Moq;
+using System.ComponentModel;
 
 namespace IdentityServiceTests
 {
@@ -53,13 +54,44 @@ namespace IdentityServiceTests
             _userRepositoryMock.Setup(r => r.GetByUsername("UnitTest")).ReturnsAsync(user);
             _userHasherMock.Setup(h => h.Verify("inputpass", "hashed-pass")).Returns(true);
             _mapper.Setup(m => m.Map<UserJwtDTO>(user)).Returns(userJwtDto);
-            //_mapper.Setup(x => x.Map<>)
 
             var userResult = await _authService.LoginUser(userLoginDto);
 
             Assert.NotNull(userResult);
             Assert.Equal(userJwtDto.UserName, userResult.UserName);
             Assert.Equal(userJwtDto.Role, userResult.Role);
+        }
+
+        [Fact]
+        public async Task GetUserById_ValidId_ReturnUserDTO()
+        {
+            Guid expectedId = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A");
+
+            var user = new User
+            {
+                Id = expectedId,
+                AvatarUrl = null,
+                UserName = "UnitTest",
+                DisplayName = "Test",
+                PasswordHash = "hashed-pass",
+                CreatedAt = DateTime.UtcNow.AddDays(-1),
+                Role = 0
+            };
+
+            var userDTO = new GetUserDTO
+            {
+                Id = expectedId,
+                UserName = "UnitTest",
+                DisplayName = "Test",
+            };
+
+            _userRepositoryMock.Setup(r => r.GetAsync(expectedId)).ReturnsAsync(user);
+            _mapper.Setup(m => m.Map<GetUserDTO>(user)).Returns(userDTO);
+
+            var userResult = await _authService.GetUserById(expectedId);
+
+            Assert.NotNull(userResult);
+            Assert.Equal("UnitTest", userResult.UserName);
         }
     }
 }

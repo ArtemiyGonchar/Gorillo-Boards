@@ -30,14 +30,14 @@ namespace BusinessLogicLayer.Services.Classes
 
         public async Task<bool> DeleteUserByUsername(string username)
         {
-            var userInDb = await _userRepository.GetByUsername(username) == null;
+            var user = await _userRepository.GetByUsername(username);
 
-            if (userInDb)
+            if (user == null)
             {
                 throw new Exception("Such user not exists");
             }
 
-            var user = await _userRepository.GetByUsername(username);
+            //var user = await _userRepository.GetByUsername(username);
             var isDeleted = await _userRepository.DeleteByUsername(username);
 
             if (isDeleted)

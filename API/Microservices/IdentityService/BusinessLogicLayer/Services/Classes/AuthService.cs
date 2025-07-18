@@ -24,6 +24,7 @@ namespace BusinessLogicLayer.Services.Classes
             _mapper = mapper;
         }
 
+        //get user by id
         public async Task<GetUserDTO> GetUserById(Guid Id)
         {
             var user = await _userRepository.GetAsync(Id);
@@ -36,6 +37,7 @@ namespace BusinessLogicLayer.Services.Classes
             return userMapped;
         }
 
+        //verify login
         public async Task<UserJwtDTO> LoginUser(UserLoginDTO userLoginDTO)
         {
 

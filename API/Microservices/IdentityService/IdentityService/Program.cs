@@ -70,7 +70,8 @@ namespace IdentityService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseCors("AllowReact");
 
             app.UseHttpsRedirection();
