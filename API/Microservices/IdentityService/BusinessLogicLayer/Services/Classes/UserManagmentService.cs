@@ -59,6 +59,7 @@ namespace BusinessLogicLayer.Services.Classes
             return _mapper.Map<List<GetUserDTO>>(users);
         }
 
+
         public async Task<Guid> RegisterUser(UserRegistrationDTO userRegistrationDTO)
         {
             var userInDb = await _userRepository.GetByUsername(userRegistrationDTO.UserName) == null; //cheking if user is in db

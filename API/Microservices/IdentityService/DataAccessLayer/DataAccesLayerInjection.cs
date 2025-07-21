@@ -23,6 +23,7 @@ namespace DataAccessLayer
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUserRepository, UserRepository>();
+
         }
     }
 }

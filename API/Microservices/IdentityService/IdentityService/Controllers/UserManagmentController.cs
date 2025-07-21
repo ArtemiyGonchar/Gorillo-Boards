@@ -22,6 +22,7 @@ namespace PresentationLayer.Controllers
         [HttpPost("register-user")]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDTO userRegistrationDTO)
         {
+
             var userId = await _userManagmentService.RegisterUser(userRegistrationDTO);
             _logger.LogInformation($"User registered {userId}");
             return Ok(userId);
