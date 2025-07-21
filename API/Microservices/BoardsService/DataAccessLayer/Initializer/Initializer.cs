@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,13 @@ namespace DataAccessLayer.Initializer
 {
     public class Initializer
     {
-        public static void InitializeDb(BoardsDbContext ctx)
+        private readonly BoardsDbContext _context;
+
+        public Initializer(BoardsDbContext context) { _context = context; }
+
+        public async Task InitializeDb(BoardsDbContext ctx)
         {
-            ctx.Database.EnsureCreated();
+            await ctx.Database.MigrateAsync();
         }
     }
 }

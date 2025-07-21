@@ -3,6 +3,7 @@ using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Initializer;
 using GorilloBoards.Contracts.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ namespace BusinessLogicLayer.Extensions
             services.AddScoped<IBoardsManagmentService, BoardsManagmentService>();
             services.AddScoped<IBoardAccessService, BoardAccessService>();
             services.AddScoped<IEventPublisher, AzureBusEventPublisherService>();
+            services.AddScoped<Initializer>();
         }
     }
 }
