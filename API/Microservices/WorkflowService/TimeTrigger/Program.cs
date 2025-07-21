@@ -39,3 +39,5 @@ if (!(string.IsNullOrEmpty(connectionString)))
 builder.Services.AddScoped<AzureBusEventPublisherService>();
 
 builder.Build().Run();
+
+

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Initializer
 {
-    public class Initializer(WorkflowDbContext ctx)
+    public class Initializer
     {
-        public static void InitializeDb(WorkflowDbContext ctx) //initializing db if not exists
+
+        private readonly WorkflowDbContext _dbContext;
+
+        public Initializer(WorkflowDbContext dbContext) { _dbContext = dbContext; }
+
+        public async Task InitializeDb(WorkflowDbContext ctx) //initializing db if not exists
         {
-            ctx.Database.EnsureCreated();
+            await ctx.Database.MigrateAsync();
         }
     }
 }

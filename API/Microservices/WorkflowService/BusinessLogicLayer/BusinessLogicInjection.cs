@@ -4,6 +4,7 @@ using BusinessLogicLayer.Mapping;
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Initializer;
 using GorilloBoards.Contracts.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +43,7 @@ namespace BusinessLogicLayer
             services.AddScoped<ITimeLogService, TimeLogService>();
             services.AddScoped<AuthHeaderHandler>();
             services.AddScoped<IEventPublisher, AzureBusEventPublisherService>();
+            services.AddScoped<Initializer>();
         }
     }
 }

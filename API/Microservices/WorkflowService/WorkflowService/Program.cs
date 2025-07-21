@@ -1,5 +1,7 @@
 
 using BusinessLogicLayer;
+using DataAccessLayer.DatabaseContext;
+using DataAccessLayer.Initializer;
 using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Extensions;
 using PresentationLayer.Hubs;
@@ -10,7 +12,7 @@ namespace WorkflowService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,23 @@ namespace WorkflowService
 
             builder.Services.AddHttpContextAccessor(); //&&&
             builder.Services.AddRefitClients(builder.Configuration);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact",
+                    policy =>
+                    {
+                        policy.SetIsOriginAllowed(_ => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+
+                        //policy.WithOrigins("https://gorillo-boards.azurewebsites.net/", "https://workflowservicepl.azurewebsites.net/")
+                        //    .AllowAnyHeader()
+                        //    .AllowAnyMethod()
+                        //    .AllowCredentials();
+                        //.AllowAnyOrigin();
+                        //.SetIsOriginAllowed(hostName => true);
+
+                    });
+            });
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
@@ -39,7 +58,7 @@ namespace WorkflowService
                     )
                 };
             });
-
+            /*
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowReact",
@@ -50,7 +69,7 @@ namespace WorkflowService
                             .AllowAnyMethod()
                             .AllowCredentials();
                     });
-            });
+            });*/
 
 
             builder.Services.AddSignalR();
@@ -63,6 +82,22 @@ namespace WorkflowService
             );
 
             var app = builder.Build();
+            /*
+            using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                try
+                {
+                    var context = serviceProvider.GetRequiredService<WorkflowDbContext>();
+
+                    var initializer = serviceProvider.GetRequiredService<Initializer>();
+                    await initializer.InitializeDb(context);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }*/
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -70,9 +105,11 @@ namespace WorkflowService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            //app.MapHub<WorkflowHub>("/workflowhub");
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            //app.MapHub<WorkflowHub>("/workflowhub"); //??
             app.UseCors("AllowReact");
+            app.MapHub<WorkflowHub>("/workflowhub").RequireCors("AllowReact"); //??
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -80,7 +117,7 @@ namespace WorkflowService
 
 
             app.MapControllers();
-            app.MapHub<WorkflowHub>("/workflowhub");
+            //app.MapHub<WorkflowHub>("/workflowhub");
             app.Run();
         }
     }
