@@ -15,7 +15,7 @@ function App() {
                 transition={Slide}
             />
             <Routes>
-                <Route path="/" element={<Boards />} />
+                <Route path="/" element={<LoginPage />} />
                 <Route path="/login" element={<LoginPage />}></Route>
                         <Route path="/boards" element={<Boards/>}></Route>
                         <Route path={"/boards/:boardId"} element={<Board />}></Route>

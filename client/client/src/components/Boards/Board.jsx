@@ -94,7 +94,8 @@ export default function Board() {
 
         init();
         const connection = new HubConnectionBuilder()
-            .withUrl("https://localhost:7007/workflowhub")
+            .withUrl("https://workflowservicepl.azurewebsites.net/workflowhub")
+            //.withUrl("https://localhost:7007/workflowhub")
             .withAutomaticReconnect()
             .build();
 
