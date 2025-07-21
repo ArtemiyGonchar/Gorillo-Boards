@@ -1,5 +1,7 @@
 using BusinessLogicLayer;
 using DataAccessLayer;
+using DataAccessLayer.DatabaseContext;
+using DataAccessLayer.Initializer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,7 +13,7 @@ namespace IdentityService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -19,19 +21,24 @@ namespace IdentityService
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
             builder.Services.AddBLLayer(builder.Configuration);
             //builder.Services.AddDataAccesLayer(builder.Configuration);
             builder.Services.AddJwtTokenProvider();
+
 
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowReact",
                     policy =>
                     {
-                        policy.WithOrigins(builder.Configuration["Cors"])
+                        policy   //.WithOrigins(builder.Configuration["Cors"])
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .AllowCredentials();
+                             //.AllowCredentials()
+                             .AllowAnyOrigin();
+                        //.SetIsOriginAllowed(hostName => true);
+
                     });
             });
 
@@ -61,28 +68,53 @@ namespace IdentityService
                 configuration.ReadFrom.Configuration(context.Configuration)
             );
 
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            try
             {
+                var app = builder.Build();
+
+                // Configure the HTTP request pipeline.
+                if (app.Environment.IsDevelopment())
+                {
+                    //app.UseSwagger();
+                    //app.UseSwaggerUI();
+                }
+
+                using (var scope = app.Services.CreateScope())
+                {
+                    var serviceProvider = scope.ServiceProvider;
+                    try
+                    {
+                        var context = serviceProvider.GetRequiredService<IdentityDbContext>();
+
+                        var initializer = serviceProvider.GetRequiredService<Initializer>();
+                        await initializer.InitializeDb(context);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+
+                app.UseHttpsRedirection();
+                app.UseRouting();
+
+                app.UseCors("AllowReact");
+
+                app.UseAuthentication();
+                app.UseAuthorization();
+
+                app.MapControllers();
+
+                app.Run();
             }
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            app.UseCors("AllowReact");
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
     }
 }
