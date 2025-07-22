@@ -215,5 +215,256 @@ namespace WorkflowServiceTests
 
             Assert.Equal(result, updatedTicket.Id);
         }
+        [Fact]
+        public async Task CreateTicket_ValitDTO_ReturnGuid()
+        {
+            var expectedId = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A");
+
+            var ticketCreate = new TicketCreateDTO
+            {
+                StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                BoardId = Guid.Parse("B7061755-661B-401E-E470-08DDB0D1156A"),
+                Title = "Test",
+                UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                Description = "TestDesc",
+            };
+
+            var state = new State
+            {
+                BoardId = Guid.Parse("B7061755-661B-401E-E470-08DDB0D1156A"),
+                Id = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                Title = "TestT"
+            };
+
+            var ticket = new Ticket
+            {
+                Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                Title = "Test",
+                CreatedAt = DateTime.UtcNow.AddDays(-1),
+                StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                Description = "TestDesc",
+                State = state
+            };
+
+            var ticketEvent = new TicketCreatedEvent
+            {
+                BoardId = Guid.Parse("B7061755-661B-401E-E470-08DDB0D1156A"),
+                Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
+            };
+
+            _mapper.Setup(m => m.Map<Ticket>(ticketCreate)).Returns(ticket);
+            _stateRepository.Setup(s => s.GetAsync(ticketCreate.StateId)).ReturnsAsync(state);
+            _ticketRepository.Setup(t => t.CreateTicketWithOder(ticket)).ReturnsAsync(expectedId);
+            _ticketRepository.Setup(t => t.GetAsync(expectedId)).ReturnsAsync(ticket);
+            _eventPublisher.Setup(e => e.Publish(ticketEvent));
+
+
+            var result = await _ticketManagementService.CreateTicket(ticketCreate);
+
+            Assert.Equal(result, expectedId);
+        }
+
+        [Fact]
+        public async Task DeleteClosedTickets_HasTickets_ReturnsTrue()
+        {
+            _ticketRepository.Setup(t => t.DeleteClosedTickets()).ReturnsAsync(true);
+
+            var result = await _ticketManagementService.DeleteClosedTickets();
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task DeleteClosedTickets_HasNoTickets_ReturnsFalse()
+        {
+            _ticketRepository.Setup(t => t.DeleteClosedTickets()).ReturnsAsync(false);
+
+            var result = await _ticketManagementService.DeleteClosedTickets();
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task DeleteTicket_ValidDTO_ReturnsTrue()
+        {
+            var deleteTicket = new DeleteTicketDTO
+            {
+                Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                BoardId = Guid.Parse("B7061755-661B-401E-E470-08DDB0D1156A")
+            };
+
+            var ticket = new Ticket
+            {
+                Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                Title = "Test",
+                CreatedAt = DateTime.UtcNow.AddDays(-1),
+                StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                Description = "TestDesc"
+            };
+
+            var allTickets = new List<Ticket>
+            {
+                new Ticket
+                {
+                    Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc"
+                }
+            };
+
+            var deletedEvent = new TicketDeletedEvent
+            {
+                Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A")
+            };
+
+            _ticketRepository.Setup(t => t.GetAsync(deleteTicket.Id)).ReturnsAsync(ticket);
+            _ticketRepository.Setup(t => t.DeleteAsync(deleteTicket.Id)).ReturnsAsync(true);
+            _ticketRepository.Setup(t => t.GetTicketsByStateId(ticket.StateId)).ReturnsAsync(allTickets);
+            _eventPublisher.Setup(e => e.Publish(deletedEvent));
+
+            _ticketRepository.Setup(t => t.UpdateManyTickets(allTickets));
+
+            var result = await _ticketManagementService.DeleteTicket(deleteTicket);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task GetTicketsByState_HasTickets_ReturnTickets()
+        {
+            var ticketList = new List<Ticket>
+            {
+                new Ticket
+                {
+                    Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc"
+                },
+
+                new Ticket
+                {
+                    Id = Guid.Parse("F7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc"
+                }
+            };
+
+            var ticketListMapped = new List<TicketListDTO>
+            {
+                new TicketListDTO
+                {
+                    Id = Guid.Parse("F7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc"
+                },
+
+                new TicketListDTO
+                {
+                    Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc"
+                }
+            };
+
+            var stateById = new TicketGetByState
+            {
+                StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A")
+            };
+
+            var state = new State
+            {
+                BoardId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156B"),
+                Id = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                Title = "Test"
+            };
+
+            _stateRepository.Setup(s => s.GetAsync(stateById.StateId)).ReturnsAsync(state);
+            _ticketRepository.Setup(t => t.GetTicketByState(stateById.StateId)).ReturnsAsync(ticketList);
+            _mapper.Setup(m => m.Map<List<TicketListDTO>>(ticketList)).Returns(ticketListMapped);
+
+            var result = await _ticketManagementService.GetTicketsByState(stateById);
+
+            Assert.NotNull(result);
+            Assert.Equal("Test", result[0].Title);
+        }
+
+        [Fact]
+        public async Task GetClosedTickets_HasClosedTickets_ReturnTickets()
+        {
+            var ticketList = new List<Ticket>
+            {
+                new Ticket
+                {
+                    Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc",
+                    IsClosed = true
+                },
+
+                new Ticket
+                {
+                    Id = Guid.Parse("F7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc",
+                    IsClosed = true
+                }
+            };
+
+            var ticketListMapped = new List<TicketListDTO>
+            {
+                new TicketListDTO
+                {
+                    Id = Guid.Parse("F7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc",
+                    IsClosed = true
+                },
+
+                new TicketListDTO
+                {
+                    Id = Guid.Parse("A7061755-661B-401E-E470-08DDB0D1156A"),
+                    Title = "Test",
+                    CreatedAt = DateTime.UtcNow.AddDays(-1),
+                    StateId = Guid.Parse("C7061755-661B-401E-E470-08DDB0D1156A"),
+                    UserRequestor = Guid.Parse("D7061755-661B-401E-E470-08DDB0D1156A"),
+                    Description = "TestDesc",
+                    IsClosed = true
+                }
+            };
+
+            _ticketRepository.Setup(t => t.GetClosedTickets()).ReturnsAsync(ticketList);
+            _mapper.Setup(m => m.Map<List<TicketListDTO>>(ticketList)).Returns(ticketListMapped);
+
+            var result = await _ticketManagementService.GetClosedTickets();
+            Assert.NotNull(result);
+            Assert.Equal("Test", result[0].Title);
+        }
     }
 }
