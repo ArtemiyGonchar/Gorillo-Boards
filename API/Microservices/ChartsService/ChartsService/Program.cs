@@ -1,5 +1,7 @@
 using BusinessLogicLayer;
 using ChartsService.Extensions;
+using DataAccessLayer.DatabaseContext;
+using DataAccessLayer.Initializer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -7,7 +9,7 @@ namespace ChartsService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,21 @@ namespace ChartsService
             builder.Services.AddBLLayer(builder.Configuration);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGenWithJWT();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact",
+                    policy =>
+                    {
+                        policy   //.WithOrigins(builder.Configuration["Cors"])
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                             //.AllowCredentials()
+                             .AllowAnyOrigin();
+                        //.SetIsOriginAllowed(hostName => true);
+
+                    });
+            });
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
@@ -34,7 +51,7 @@ namespace ChartsService
                     )
                 };
             });
-
+            /*
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowReact",
@@ -46,19 +63,36 @@ namespace ChartsService
                             .AllowCredentials();
                     });
             });
-
+            */
             builder.Host.UseSerilog((context, configuration) =>
                 configuration.ReadFrom.Configuration(context.Configuration)
             );
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                try
+                {
+                    var context = serviceProvider.GetRequiredService<ChartsDbContext>();
+
+                    var initializer = serviceProvider.GetRequiredService<Initializer>();
+                    await initializer.InitializeDb(context);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseCors("AllowReact");
             app.UseHttpsRedirection();
 
