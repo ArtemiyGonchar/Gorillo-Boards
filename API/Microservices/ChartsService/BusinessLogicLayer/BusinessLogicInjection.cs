@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Services.Classes;
 using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Initializer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,6 +21,7 @@ namespace BusinessLogicLayer
             services.AddAutoMapper(typeof(AutomapperBLLProfile));
             services.AddScoped<ITicketProcessorService, TicketProcessorService>();
             services.AddScoped<IChartsService, ChartsService>();
+            services.AddScoped<Initializer>();
         }
     }
 }

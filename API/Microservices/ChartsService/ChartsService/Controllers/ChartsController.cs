@@ -32,5 +32,11 @@ namespace ChartsService.Controllers
             var tickets = await _chartsService.GetTicketsByDateAndBoard(dto);
             return Ok(tickets);
         }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> test()
+        {
+            return Ok(true);
+        }
     }
 }
