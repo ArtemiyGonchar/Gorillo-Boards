@@ -1,6 +1,6 @@
 {
   "boardsApi": "https://boardsservicepl.azurewebsites.net/api",
-  "chartsApi": "https://localhost:7209/api",
+  "chartsApi": "https://chartsservicepl.azurewebsites.net/api",
   "identityApi": "https://identityservicepl.azurewebsites.net/api",
   "workflowApi": "https://workflowservicepl.azurewebsites.net/api"
 }
