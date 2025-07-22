@@ -5,6 +5,7 @@ import {CSS} from "@dnd-kit/utilities";
 import {useEffect, useState} from "react";
 import {get_label_by_id} from "../../api/workflowApi.js";
 import {useParams} from "react-router-dom";
+import {get_user} from "../../api/identityApi.js";
 
 export default function Ticket({ticket, onClickTicket, isFiltering}) {
     const {attributes, listeners,
@@ -19,6 +20,7 @@ export default function Ticket({ticket, onClickTicket, isFiltering}) {
     }});
     const [label, setLabel] = useState('');
     const [hasLabel, setHasLabel] = useState(false);
+    const [user, setUser] = useState('');
     const params = useParams();
     useEffect(() => {
         if(ticket.ticketLabelId !== null){
@@ -27,8 +29,14 @@ export default function Ticket({ticket, onClickTicket, isFiltering}) {
                 setLabel(labelRes.data.title);
                 setHasLabel(true);
             }
+
             fetchData();
         }
+        const fetchUser = async () => {
+            const userRes = await get_user(ticket.userRequestor);
+            setUser(userRes.data)
+        }
+        fetchUser();
     },[ticket])
 
     const style = {
@@ -42,11 +50,17 @@ export default function Ticket({ticket, onClickTicket, isFiltering}) {
                     <div className='ticket-title' {...(isFiltering && attributes)} {...(isFiltering && listeners)}><p>{ticket.title}</p></div>
                     <TfiAlignJustify className='ticket-icon' onClick={(e) =>{ e.stopPropagation(); onClickTicket(ticket)}} />
                 </div>
-                {hasLabel ? (
-                    <div className='ticket-sub-status'>{label}</div>
-                ) : (
-                    <></>
-                )}
+                    {hasLabel ? (
+                        <div className='ticket-bottom'>
+                            <div className='ticket-sub-status'>{label}</div>
+                            <div className='ticket-sub-status'>{user.displayName}</div>
+                        </div>
+                    ) : (
+                        <div className='ticket-bottom'>
+                            <div></div>
+                            <div className='ticket-sub-status'>{user.displayName}</div>
+                        </div>
+                    )}
             </div>
         </div>
         </>

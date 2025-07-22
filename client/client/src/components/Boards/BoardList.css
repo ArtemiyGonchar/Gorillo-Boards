@@ -25,6 +25,7 @@
 
 .add-board:hover {
     background: #7e7e7e;
+    cursor: pointer;
 }
 
 .li-boards{
@@ -50,4 +51,5 @@
     transform: scale(1.02);
     background-color: #555;
     transition:  background-color 0.3s;
+    cursor: pointer;
 }
